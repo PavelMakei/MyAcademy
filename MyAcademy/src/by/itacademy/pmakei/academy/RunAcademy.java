@@ -6,7 +6,7 @@ import by.itacademy.pmakei.academy.entity.Student;
 /**
  * @author Pavel Makei
  */
-public class RunAcademy {
+public final class RunAcademy {
 
     Academy academy;
 
@@ -18,10 +18,14 @@ public class RunAcademy {
 
 
     private void run() {
+
+      //TODO Create, Initialize, Work
+
+
       academy = Academy.getInstance();
-      academy.create();
+      academy.initialize();
       fillDataOfAcademy();
-      academy.run();
+      academy.menu();
 
 
     }

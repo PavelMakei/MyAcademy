@@ -1,14 +1,12 @@
 package by.itacademy.pmakei.academy.utils;
 
-import by.itacademy.pmakei.academy.entity.Academy;
-import by.itacademy.pmakei.academy.entity.Course;
-import by.itacademy.pmakei.academy.entity.Human;
+import by.itacademy.pmakei.academy.entity.*;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class AcademyUtils {
+public final class AcademyUtils {
 
     private static Academy academy;
 
@@ -22,15 +20,42 @@ public class AcademyUtils {
     // TODO: 11.12.2021  all academyUtils
 
 
-    public static void sortHumanByName(List humans) {
+    public static List sortHumanByName(List humans) {
 
         Collections.sort(humans);
-        for (
-                Object human: humans) {
-            System.out.println(((Human)human).getName());
+        return humans;
+    }
+
+    public static void printAllTeachers(List teachers){
+        for(Object t : teachers){
+            Teacher teacher = (Teacher) t;
+            System.out.println("Id - " + teacher.getPersonalId() + "; "
+                    + "name & surname - " + teacher.getName() + " "
+                    + teacher.getSurname() + "; "
+                    + "age - " + teacher.getAge() + "; "
+                    +  "course - " + teacher.getCourse().getCourseName() + ".\n");
+
         }
     }
 
+    public static void printAllStudents(List students){
+        for(Object s : students){
+            Student student= (Student) s;
+            System.out.println("Id - " + student.getPersonalId() + "; "
+                    + "name & surname - " + student.getName() + " "
+                    + student.getSurname() + "; "
+                    + "age - " + student.getAge() + "; ");
+            if (student.getCourses().size() == 0){
+                System.out.println("Doesn't join any course");
+            }else {
+                System.out.println("Join coursrs:\n");
+                for (Course course : student.getCourses()) {
+                    System.out.println(course.getCourseName() + ";");
+                }
+            }
+            System.out.println();
+        }
+    }
 
 
 

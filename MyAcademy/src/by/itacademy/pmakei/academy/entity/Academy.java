@@ -24,21 +24,22 @@ public class Academy {
         return academy;
     }
 
-    public static StringBuffer inputFolder = new StringBuffer();
-    public static StringBuffer outputFolder = new StringBuffer();
+    public static String inputFolder;
+    public static String outputFolder;
+    public static String logsFolder;
 
     private Dao studentDAO;
     private Dao teacherDAO;
     private Dao baseDAO;
 
 
-    private ArrayList<Student> students;
-    private ArrayList<Teacher> teachers;
+    private List<Student> students;
+    private List<Teacher> teachers;
     private HashMap<String, Course> courses;
     private AcademyUtils academyUtils;
 
 
-    public void create() {
+    public void initialize() {
 
         courses = new HashMap<String, Course>();
         teachers = new ArrayList<>();
@@ -48,91 +49,50 @@ public class Academy {
         studentDAO = new BaseDao(students);
         teacherDAO = new BaseDao(teachers);
 
+// Общая папка
+        String commonFolder = "src"
+                +(File.separator)
+                +("by")
+                +(File.separator)
+                +("itacademy")
+                +(File.separator)
+                +("pmakei")
+                +(File.separator)
+                +("academy")
+                +(File.separator);
 
-// Папка, где хранятся входные файлы
-        inputFolder.append("course")
-                .append(File.separator)
-                .append("by")
-                .append(File.separator)
-                .append("itacademy")
-                .append(File.separator)
-                .append("first")
-                .append(File.separator)
-                .append("project")
-                .append(File.separator)
-                .append("files")
-                .append(File.separator)
-                .append("input")
-                .append(File.separator);
-// Папка, где хранятся выходные файлы
-        outputFolder.append("src")
-        ppend(File.separator)
-        ppend("by")
-        ppend(File.separator)
-        ppend("pvt")
-        ppend(File.separator)
-        ppend("khudnitsky")
-        ppend(File.separator)
-        ppend("travel")
-        ppend(File.separator)
-        ppend("files")
-        ppend(File.separator)
-        ppend("output")
-        ppend(File.separator);
+// Папка с входными файлами
+        inputFolder += commonFolder
+                +("files")
+                +(File.separator)
+                +("input")
+                +(File.separator);
+
+// Папка с выходными файлами
+        outputFolder += commonFolder
+                +("files")
+                +(File.separator)
+                +("output")
+                +(File.separator);
+
+// Папка с логами
+        logsFolder += commonFolder
+                +("files")
+                +(File.separator)
+                +("logs")
+                +(File.separator);
 
 
     }
 //TODO 3 menus: as admin, as teacher as student
 
-    public void run() {
-
-        AcademyUtils.clearScreen();
-        System.out.println("Welcome to our academy! \n");
-
-        int menu;
-
-        do {
-            System.out.println("\n");
-            printMenu();
-            menu = getMenuPoint();
-            switch (menu) {
-                case 1:
-                    AcademyUtils.printAllCourses();
-                    break;
-                case 2:
-                    printAllTeachers();
-                    break;
-                case 3:
-                    printAllStudents();
-                    break;
-                case 4:
-                    getStudentInfoById();
-                    break;
-                case 5:
-                    addStudentToCourse();
-                    break;
-                case 6:
-                    addNewStudent();
-                    break;
-                case 7:
-                    setMark();
-                    break;
-                case 8:
-                    return;
-                default:
-                    AcademyUtils.clearScreen();
-                    System.out.println();
-
-            }
-        } while (menu != 0);
-    }
 
     public List<Student> getCopyStudents() {
         List list = new ArrayList(students);
         return (List<Student>) list;
     }
 
-    public List<Teacher> getTeachers() {
+    public List<Teacher> getCopyTeachers() {
         List list = new ArrayList(teachers);
         return (List) list;
     }
@@ -140,30 +100,6 @@ public class Academy {
     public HashMap<String, Course> getCourses() {
         return courses;
     }
-
-    public void getStudentInfoById() {
-
-        printAllStudents();
-        int id = getIdFromConsole("student");
-        Human h = getHumanById(students, id);
-        if (h == null) {
-            System.out.println("\nStudent with id " + id + " doesn't exist");
-            return;
-        } else {
-            Student s = (Student) h;
-            System.out.println("\nStudent's name: " + s.getName() + "; Surname: " + s.getSurname() + "; age : " + s.getAge());
-            System.out.println("Joins courses :");
-            for (Course course : s.getCourses()) {
-                System.out.println(course.getCourseName());
-            }
-            System.out.println("\nHas marks: \n");
-            for (Mark mark : s.getMarks()) {
-                System.out.println("Course : " + mark.getCourse().getCourseName() + "; Teacher : " + mark.getTeacher().getName() + " " +
-                        mark.getTeacher().getSurname() + "; mark : " + AllowedMark.values()[mark.getValue()] + ";\nfeedback : " + mark.getFeedback() + ".\n");
-            }
-        }
-    }
-
 
     public Human getHumanById(List list, int id) {
 
@@ -217,18 +153,6 @@ public class Academy {
         return (selectedMenuPointFromUser < 1 || selectedMenuPointFromUser > 9) ? 0 : selectedMenuPointFromUser;
     }
 
-
-    private void printMenu() {
-
-        System.out.println("1. Get all courses");
-        System.out.println("2. Get all teachers");
-        System.out.println("3. Get all students");
-        System.out.println("4. Get student info by id");
-        System.out.println("5. Add student to course");
-        System.out.println("6. Add new student");
-        System.out.println("7. Set mark to student");
-        System.out.println("8. Exit");
-    }
 
 
     public Course getCourseByCourseName(String courseName) {
@@ -379,6 +303,134 @@ public class Academy {
         System.out.println("Student has been added to course");
     }
 
+    public void getStudentInfoById() {
 
-//
+        printAllStudents();
+        int id = getIdFromConsole("student");
+        Human h = getHumanById(students, id);
+        if (h == null) {
+            System.out.println("\nStudent with id " + id + " doesn't exist");
+            return;
+        } else {
+            Student s = (Student) h;
+            System.out.println("\nStudent's name: " + s.getName() + "; Surname: " + s.getSurname() + "; age : " + s.getAge());
+            System.out.println("Joins courses :");
+            for (Course course : s.getCourses()) {
+                System.out.println(course.getCourseName());
+            }
+            System.out.println("\nHas marks: \n");
+            for (Mark mark : s.getMarks()) {
+                System.out.println("Course : " + mark.getCourse().getCourseName() + "; Teacher : " + mark.getTeacher().getName() + " " +
+                        mark.getTeacher().getSurname() + "; mark : " + AllowedMark.values()[mark.getValue()] + ";\nfeedback : " + mark.getFeedback() + ".\n");
+            }
+        }
+    }
+    public void menu() {
+        while (true) {
+            System.out.println("===========================================================");
+            System.out.println("Выберите пользователя:");
+            System.out.println("1. Администратор");
+            System.out.println("2. Преподаватель");
+            System.out.println("3. Студент");
+            System.out.println("0. Выход");
+            System.out.println("===========================================================");
+
+            switch (AcademyUtils.getIntFromConsole()){
+                case 1:
+                    System.out.println("===========================================================");
+                    System.out.println("Вы вошли как администратор");
+                    System.out.println("===========================================================");
+                    adminMenu();
+                    break;
+                case 2:
+                    System.out.println("===========================================================");
+                    System.out.println("Вы вошли как преподаватель");
+                    System.out.println("===========================================================");
+                    teacherMenu();
+                    break;
+                case 3:
+                    System.out.println("===========================================================");
+                    System.out.println("Вы вошли как студент");
+                    System.out.println("===========================================================");
+                    studentMenu();
+                    break;
+                case 0:
+                    System.out.println("===========================================================");
+                    System.out.println("Выход");
+                    System.out.println("===========================================================");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("===========================================================");
+                    System.out.println("Некорректный ввод, повторите");
+                    System.out.println("===========================================================");
+                    break;
+            }
+        }
+    }
+
+    private void studentMenu() {
+        System.out.println("student menu");
+    }
+
+    private void teacherMenu() {
+        System.out.println( "teacher menu");
+    }
+
+    private void adminMenu() {
+        while(true){
+            System.out.println("===========================================================");
+            System.out.println("Выберите действие:");
+            System.out.println("1. Просмотреть список преподавателей");
+            System.out.println("2. Просмотреть список студентов");
+            System.out.println("3. Просмотреть список курсов");
+            System.out.println("4. Добавить преподавателя");
+            System.out.println("5. Добавить студента");
+            System.out.println("6. Назначить преподавателя на курс");
+            System.out.println("0. Выход");
+            System.out.println("===========================================================");
+
+            switch (AcademyUtils.getIntFromConsole()){
+                case 1:
+                    System.out.println("===========================================================");
+                    System.out.println("Список преподавателей:");
+                    System.out.println("===========================================================");
+                    AcademyUtils.printAllTeachers(teachers);
+                    break;
+                case 2:
+                    System.out.println("===========================================================");
+                    System.out.println("Список студентов:");
+                    System.out.println("===========================================================");
+                    AcademyUtils.printAllStudents(students);
+                    break;
+                case 3:
+                    System.out.println("===========================================================");
+                    System.out.println("Список курсов:");
+                    System.out.println("===========================================================");
+                    AcademyUtils.printAllCourses();
+                    break;
+
+                    //TODO добавить остальные пункты
+
+
+
+
+                case 0:
+                    System.out.println("===========================================================");
+                    System.out.println("Выход");
+                    System.out.println("===========================================================");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("===========================================================");
+                    System.out.println("Некорректный ввод, повторите");
+                    System.out.println("===========================================================");
+                    break;
+            }
+        }
+
+
+
+    }
+
 }
