@@ -290,7 +290,7 @@ public class Academy {
       System.out.println("1. Администратор");
       System.out.println("2. Преподаватель");
       System.out.println("3. Студент");
-      System.out.println("0. Выход");
+      System.out.println("4. Выход");
       System.out.println("===========================================================");
 
       switch (AcademyUtils.getIntFromConsole()) {
@@ -312,7 +312,7 @@ public class Academy {
           System.out.println("===========================================================");
           studentMenu();
           break;
-        case 0:
+        case 4:
           System.out.println("===========================================================");
           System.out.println("Выход");
           System.out.println("===========================================================");
@@ -351,7 +351,7 @@ public class Academy {
       System.out.println("Выберите действие:");
       System.out.println("1. Записаться на курс");
       System.out.println("2. Просмотреть оценки");
-      System.out.println("0. Выход");
+      System.out.println("3. Выход");
       System.out.println("===========================================================");
 
       switch (AcademyUtils.getIntFromConsole()) {
@@ -369,7 +369,7 @@ public class Academy {
           AcademyUtils.printAllMarks(student.getMarks());
           break;
 
-        case 0:
+        case 3:
           System.out.println("===========================================================");
           System.out.println("Выход");
           System.out.println("===========================================================");
@@ -437,7 +437,7 @@ public class Academy {
       System.out.println("===========================================================");
       System.out.println("Введите Id преподавателя");
       System.out.println("===========================================================");
-      object = getHumanById(getCopyStudents(), AcademyUtils.getIntFromConsole());
+      object = getHumanById(getCopyTeachers(), AcademyUtils.getIntFromConsole());
       if (object == null) {
         System.out.println("===========================================================");
         System.out.println("Введён некорректный Id, повторите");
@@ -453,7 +453,7 @@ public class Academy {
       System.out.println("Выберите действие:");
       System.out.println("1. Просмотреть список учеников на курсе");
       System.out.println("2. Поставить оценку студенту");
-      System.out.println("0. Выход");
+      System.out.println("3. Выход");
 
       System.out.println("===========================================================");
       switch (AcademyUtils.getIntFromConsole()) {
@@ -462,7 +462,18 @@ public class Academy {
           System.out.println("Список учеников на курсе");
           System.out.println("===========================================================");
           AcademyUtils.printAllStudentsOnCourse(teacher.getCourse());
-        case 0:
+          break;
+
+        case 2:
+          System.out.println("===========================================================");
+          System.out.println("Поставить оценку студенту");
+          System.out.println("===========================================================");
+          AcademyUtils.setMarkToStudent(teacher);
+          break;
+
+
+
+        case 3:
           System.out.println("===========================================================");
           System.out.println("Выход");
           System.out.println("===========================================================");

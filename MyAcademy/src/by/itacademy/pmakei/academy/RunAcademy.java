@@ -66,7 +66,7 @@ public final class RunAcademy {
         academy.processAddStudentToCourse((Student) academy.getHumanById(academy.getCopyStudents(), 7), academy.getCourseByCourseName("Programming"));
         academy.processAddStudentToCourse((Student) academy.getHumanById(academy.getCopyStudents(), 7), academy.getCourseByCourseName("Biology"));
         academy.processAddStudentToCourse((Student) academy.getHumanById(academy.getCopyStudents(), 7), academy.getCourseByCourseName("Language"));
-        academy.processAddStudentToCourse((Student) academy.getHumanById(academy.getCopyStudents(), 7), academy.getCourseByCourseName("Sociology"));
+        //academy.processAddStudentToCourse((Student) academy.getHumanById(academy.getCopyStudents(), 7), academy.getCourseByCourseName("Sociology"));
         academy.processAddStudentToCourse((Student) academy.getHumanById(academy.getCopyStudents(), 7), academy.getCourseByCourseName("Physic"));
 
     }
