@@ -76,5 +76,6 @@ public abstract class Human implements Comparable{
     public int compareTo(Object o) {
         Human human = (Human) o;
         return this.getName().compareTo(human.getName());
+
     }
 }

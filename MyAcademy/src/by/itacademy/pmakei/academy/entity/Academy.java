@@ -117,20 +117,6 @@ public class Academy {
     return null;
   }
 
-  private int getIdFromConsole(String typeOfHuman) {
-
-    int gotId;
-    do {
-      //            clearScreen();
-      System.out.println("Enter id of " + typeOfHuman);
-      int selectedIntFromConsole = AcademyUtils.getIntFromConsole();
-      gotId = selectedIntFromConsole <= 0 ? 0 : selectedIntFromConsole;
-
-    } while (gotId == 0);
-
-    return gotId;
-  }
-
   //  private void printAllStudents() {
   //
   //    for (Student s : students) {
@@ -342,7 +328,7 @@ public class Academy {
   }
 
   private void studentMenu() {
-    System.out.println("student menu");
+    System.out.println("Выберите студента");
     Student student;
     Object object;
     while (true) {
@@ -380,7 +366,7 @@ public class Academy {
           System.out.println("===========================================================");
           System.out.println("Просмотреть оценки");
           System.out.println("===========================================================");
-          // addStudentToCourse(student);
+          AcademyUtils.printAllMarks(student.getMarks());
           break;
 
         case 0:
@@ -397,7 +383,6 @@ public class Academy {
       }
     }
   }
-
 
   private void addStudentToCourse(Student student) { // TODO optimize
     Object object;
@@ -442,9 +427,55 @@ public class Academy {
     }
   }
 
-
   private void teacherMenu() {
-    System.out.println("teacher menu");
+    System.out.println("Выберите преподавателя");
+    Teacher teacher;
+    Object object;
+
+    while (true) {
+      AcademyUtils.printAllTeachers(getCopyTeachers());
+      System.out.println("===========================================================");
+      System.out.println("Введите Id преподавателя");
+      System.out.println("===========================================================");
+      object = getHumanById(getCopyStudents(), AcademyUtils.getIntFromConsole());
+      if (object == null) {
+        System.out.println("===========================================================");
+        System.out.println("Введён некорректный Id, повторите");
+        System.out.println("===========================================================");
+      } else {
+        teacher = (Teacher) object;
+        break;
+      }
+    }
+
+      while (true) {
+      System.out.println("===========================================================");
+      System.out.println("Выберите действие:");
+      System.out.println("1. Просмотреть список учеников на курсе");
+      System.out.println("2. Поставить оценку студенту");
+      System.out.println("0. Выход");
+
+      System.out.println("===========================================================");
+      switch (AcademyUtils.getIntFromConsole()) {
+        case 1:
+          System.out.println("===========================================================");
+          System.out.println("Список учеников на курсе");
+          System.out.println("===========================================================");
+          AcademyUtils.printAllStudentsOnCourse(teacher.getCourse());
+        case 0:
+          System.out.println("===========================================================");
+          System.out.println("Выход");
+          System.out.println("===========================================================");
+          return;
+
+        default:
+          System.out.println("===========================================================");
+          System.out.println("Некорректный ввод, повторите");
+          System.out.println("===========================================================");
+          break;
+      }
+
+    }
   }
 
   private void adminMenu() {

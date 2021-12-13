@@ -54,4 +54,12 @@ public class Mark implements Comparable{
         int result = this.value - ((Mark) o).value;
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Оценка = " + value +
+                ", по курсу = " + course.getCourseName() +
+                ", преподаватель = " + teacher.getName() + " " + teacher.getSurname() +
+                ", отзыв преподавателя = " + feedback + "\".";
+    }
 }
