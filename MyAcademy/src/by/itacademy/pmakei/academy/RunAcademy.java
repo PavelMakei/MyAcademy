@@ -25,7 +25,7 @@ public final class RunAcademy {
       academy = Academy.getInstance();
       academy.initialize();
       fillDataOfAcademy();
-      academy.menu();
+      academy.mainMenu();
 
 
     }

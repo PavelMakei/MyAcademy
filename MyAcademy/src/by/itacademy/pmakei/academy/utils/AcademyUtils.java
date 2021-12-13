@@ -30,10 +30,13 @@ public final class AcademyUtils {
         for(Object t : teachers){
             Teacher teacher = (Teacher) t;
             System.out.println("Id - " + teacher.getPersonalId() + "; "
-                    + "name & surname - " + teacher.getName() + " "
+                    + "имя и фамилия - " + teacher.getName() + " "
                     + teacher.getSurname() + "; "
-                    + "age - " + teacher.getAge() + "; "
-                    +  "course - " + teacher.getCourse().getCourseName() + ".\n");
+                    + "возраст - " + teacher.getAge() + "; ");
+                    System.out.println("курс - "
+                            + (teacher.getCourse() == null? "не назначен на курс" : teacher.getCourse().getCourseName()
+                            + ".\n")
+                    );
 
         }
     }
@@ -42,13 +45,13 @@ public final class AcademyUtils {
         for(Object s : students){
             Student student= (Student) s;
             System.out.println("Id - " + student.getPersonalId() + "; "
-                    + "name & surname - " + student.getName() + " "
+                    + "имя и фамилия - " + student.getName() + " "
                     + student.getSurname() + "; "
-                    + "age - " + student.getAge() + "; ");
+                    + "возраст - " + student.getAge() + "; ");
             if (student.getCourses().size() == 0){
-                System.out.println("Doesn't join any course");
+                System.out.println("Не записался на курсы");
             }else {
-                System.out.println("Join coursrs:\n");
+                System.out.println("Записался на курсы:\n");
                 for (Course course : student.getCourses()) {
                     System.out.println(course.getCourseName() + ";");
                 }
@@ -86,8 +89,8 @@ public final class AcademyUtils {
         do {
             clearScreen();
 
-            System.out.println("Enter course name: \n");
-            System.out.println("Available courses");
+            System.out.println("Введите название кукрса: \n");
+            System.out.println("Доступные курсы");
             AcademyUtils.printAllCourses();
             String courseNameFromUser = getStringFromConsole();
 
@@ -99,8 +102,9 @@ public final class AcademyUtils {
 
     public static void printAllCourses() {
 
-        academy.getCourses().forEach((s, c) -> System.out.println("Course name: " + s));
+        academy.getCourses().forEach((s, c) -> System.out.println("Название курса: " + s));
 
     }
+
 
 }
