@@ -2,10 +2,7 @@ package by.itacademy.pmakei.academy.utils;
 
 import by.itacademy.pmakei.academy.entity.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public final class AcademyUtils {
 
@@ -25,6 +22,7 @@ public final class AcademyUtils {
     }
 
     public static void printAllTeachers(List teachers) {
+        Collections.sort(teachers,new CompareHumanByName());
         for (Object t : teachers) {
             Teacher teacher = (Teacher) t;
             System.out.println(
@@ -48,6 +46,11 @@ public final class AcademyUtils {
     }
 
     public static void printAllStudents(List students) {
+        Comparator<Student> comparatorByName = Comparator.comparing(obj->obj.getName());
+        Collections.sort(students, comparatorByName);
+//        Comparator<Student> comparatorBySurname = Comparator.comparing(obj->obj.getSurname());
+//        Collections.sort(students, comparatorBySurname);
+
         for (Object s : students) {
             Student student = (Student) s;
             System.out.println(
