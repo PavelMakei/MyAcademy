@@ -22,7 +22,9 @@ public final class AcademyUtils {
     }
 
     public static void printAllTeachers(List teachers) {
-        Collections.sort(teachers,new CompareHumanByName());
+        Collections.sort(teachers, new CompareHumanByName());
+//        Collections.sort(teachers,new CompareHumanBySurname());
+
         for (Object t : teachers) {
             Teacher teacher = (Teacher) t;
             System.out.println(
@@ -46,7 +48,7 @@ public final class AcademyUtils {
     }
 
     public static void printAllStudents(List students) {
-        Comparator<Student> comparatorByName = Comparator.comparing(obj->obj.getName());
+        Comparator<Student> comparatorByName = Comparator.comparing(obj -> obj.getName());
         Collections.sort(students, comparatorByName);
 //        Comparator<Student> comparatorBySurname = Comparator.comparing(obj->obj.getSurname());
 //        Collections.sort(students, comparatorBySurname);
@@ -139,12 +141,12 @@ public final class AcademyUtils {
             return;
         }
         List studentsOnCourse = getListStudentsOnCourse(course);
-        if(studentsOnCourse.size() == 0){
+        if (studentsOnCourse.size() == 0) {
             System.out.println("Студентов  на курсе не зарегистрировано");
             return;
         }
-        for (Object studentObject : studentsOnCourse){
-            student = (Student)studentObject;
+        for (Object studentObject : studentsOnCourse) {
+            student = (Student) studentObject;
             System.out.println("Id " + student.getPersonalId() +
                     ", имя и фамилия: " + student.getName() +
                     " " + student.getSurname() + ";");
@@ -205,17 +207,12 @@ public final class AcademyUtils {
                 break;
             }
         }
-            for (Mark marks : student.getMarks()){
-
-
-
-        }
-
-
-
-
+        for (Mark marks : student.getMarks()) {
 
 
         }
+
+
     }
+}
 

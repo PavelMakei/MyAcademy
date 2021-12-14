@@ -88,7 +88,6 @@ public class Academy {
         .append("logs")
         .append(File.separator);
   }
-  // TODO 3 menus: as admin, as teacher as student
 
   public List<Student> getCopyStudents() {
     List list = new ArrayList(students);
