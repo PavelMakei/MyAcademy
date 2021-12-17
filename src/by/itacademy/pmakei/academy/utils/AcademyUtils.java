@@ -49,6 +49,10 @@ public final class AcademyUtils {
   }
 
   public static void printAllStudents(List students) {
+    if (students == null) {
+      System.out.println("Нет зарегистрированных студентов");
+      return;
+    }
     Comparator<Student> comparatorByName = Comparator.comparing(obj -> obj.getName());
     Collections.sort(students, comparatorByName);
     //        Comparator<Student> comparatorBySurname = Comparator.comparing(obj->obj.getSurname());
@@ -120,9 +124,7 @@ public final class AcademyUtils {
 
   public static void printAllCourses() {
 
-    academySingleton
-        .getCourses()
-        .forEach((name, course) -> System.out.println("Название курса: " + name));
+    academySingleton.getCourses().forEach((name) -> System.out.println("Название курса: " + name));
   }
 
   public static void printAllMarks(List marks) {
@@ -203,7 +205,14 @@ public final class AcademyUtils {
       return;
     }
     studentOnCourse = getListStudentsOnCourse(teacher.getCourse());
+    if (studentOnCourse.size() == 0) {
+      System.out.println("===========================================================");
+      System.out.println("Нет студентов, на курсе этого преподавателя");
+      System.out.println("===========================================================");
+      return;
+    }
     while (true) {
+      AcademyUtils.printAllStudents(academySingleton.getStudents());
 
       System.out.println("===========================================================");
       System.out.println("Введите Id студента");
@@ -231,7 +240,7 @@ public final class AcademyUtils {
                   + student.getName()
                   + " "
                   + student.getSurname()
-                  + " уже быда выставлена");
+                  + " уже была выставлена");
           System.out.println("===========================================================");
           return;
         }
@@ -242,7 +251,7 @@ public final class AcademyUtils {
       System.out.println("Ввеите оценку студенту от 1 до 5");
       System.out.println("===========================================================");
       markValue = AcademyUtils.getIntFromConsole();
-      if (markValue == 0) {
+      if (markValue < 1 || markValue > 5) {
         System.out.println("===========================================================");
         System.out.println("Введено некорректное значение, повторите");
         System.out.println("===========================================================");
@@ -251,10 +260,10 @@ public final class AcademyUtils {
       }
     }
     System.out.println("===========================================================");
-    System.out.println("Ввеите отзыв о студенте");
+    System.out.println("Введите отзыв о студенте");
     System.out.println("===========================================================");
     feedback = getStringFromConsole();
-    student.setMark(new Mark(teacher,teachersCourse,markValue,feedback));
+    student.setMark(new Mark(teacher, teachersCourse, markValue, feedback));
   }
 
   public static void saveListDataTofile(List list, String file) {
@@ -292,61 +301,109 @@ public final class AcademyUtils {
     }
   }
 
-  public static void saveMapDataTofile(Map map, String file) {
-    // TODO correct exceptions
+  public static void saveArchiveDataTofile(Archive archive, String file) throws IOException {
+    // TODO correct exceptions ПРОБРОСИТЬ!!!д
 
-    try {
-      FileOutputStream fos = new FileOutputStream(file);
-      ObjectOutputStream oos = new ObjectOutputStream(fos);
-      oos.writeObject(map);
-      oos.close();
-      fos.close();
-    } catch (IOException ioe) {
-      ioe.printStackTrace();
-    }
+    FileOutputStream fos = new FileOutputStream(file);
+    ObjectOutputStream oos = new ObjectOutputStream(fos);
+    oos.writeObject(archive);
+    oos.close();
+    fos.close();
   }
 
-  public static Map readMapDataFromFile(String file) {
-    Map map = new HashMap();
-    // TODO correct Exceptions
+  public static void saveArchive() {
+    Archive archive = new Archive();
+    archive.setCourses(academySingleton.getCourses());
+    archive.setStudents(academySingleton.getStudents());
+    archive.setTeachers(academySingleton.getTeachers());
+    archive.setHumanIdCount(Human.getHumanId());
     try {
-      FileInputStream fis = new FileInputStream(file);
-      ObjectInputStream ois = new ObjectInputStream(fis);
-      map = (Map) ois.readObject();
-      ois.close();
-      return map;
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      return new HashMap(); // возврат пустой некоррумпированной мапы
+      saveArchiveDataTofile(archive, String.valueOf(academySingleton.saveFolder) + "save.ser");
     } catch (IOException e) {
+      System.out.println("===========================================================");
+      System.out.println("Внимание! Произошла ошибка записи архива!");
+      System.out.println(
+          "Проверьте доступ к файлу"
+              + new File(String.valueOf(academySingleton.saveFolder) + "save.ser")
+                  .getAbsolutePath());
+      System.out.println("===========================================================");
       e.printStackTrace();
-      return new HashMap();
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-      return new HashMap();
     }
   }
 
-  public static void saveCollectionsToFiles() {
-    AcademyUtils.saveListDataTofile(
-        academySingleton.getStudents(),
-        String.valueOf(academySingleton.saveFolder + "students.ser"));
-    AcademyUtils.saveListDataTofile(
-        academySingleton.getTeachers(),
-        String.valueOf(academySingleton.saveFolder + "teachers.ser"));
-    AcademyUtils.saveMapDataTofile(
-        academySingleton.getCourses(), String.valueOf(academySingleton.saveFolder + "courses.ser"));
+  public static void loadArchive() {
+    Archive archive;
+
+    try {
+      archive = loadArchiveFromFile(String.valueOf(academySingleton.saveFolder) + "save.ser");
+
+      academySingleton.setCourses(archive.getCourses());
+      academySingleton.setTeachers(archive.getTeachers());
+      academySingleton.setStudents(archive.getStudents());
+      Human.setHumanIdCount(archive.getHumanIdCount());
+      System.out.println("===========================================================");
+      System.out.println("Внимание! Файлы архва успешно загружены");
+      System.out.println("===========================================================");
+      return;
+    } catch (FileNotFoundException e) {
+      System.out.println("===========================================================");
+      System.out.println(
+          "Внимание! Файлы архва не найдены, программа запущена с пустой базой данных");
+      System.out.println(
+          "Проверьте наличие файла "
+              + new File(String.valueOf(academySingleton.saveFolder) + "save.ser")
+                  .getAbsolutePath());
+      System.out.println("===========================================================");
+      academySingleton.setCourses(new LinkedList());
+      academySingleton.setTeachers(new ArrayList());
+      academySingleton.setStudents(new ArrayList());
+      Human.setHumanIdCount(1);
+      // e.printStackTrace();
+      return;
+
+    } catch (ClassNotFoundException e) {
+      System.out.println("===========================================================");
+      System.out.println(
+          "Внимание! Файлы архва повреждены, программа запущена с пустой базой данных");
+      System.out.println(
+          "Проверьте файл "
+              + new File(String.valueOf(academySingleton.saveFolder) + "save.ser")
+                  .getAbsolutePath());
+      System.out.println("===========================================================");
+      academySingleton.setCourses(new LinkedList());
+      academySingleton.setTeachers(new ArrayList());
+      academySingleton.setStudents(new ArrayList());
+      Human.setHumanIdCount(1);
+      // e.printStackTrace();
+      return;
+    } catch (IOException e) {
+      System.out.println("===========================================================");
+      System.out.println(
+          "Внимание! не удалось прочитать фал архива, программа запущена с пустой базой данных");
+      System.out.println(
+          "Проверьте файл "
+              + new File(String.valueOf(academySingleton.saveFolder) + "save.ser")
+                  .getAbsolutePath());
+      System.out.println("===========================================================");
+      academySingleton.setCourses(new LinkedList());
+      academySingleton.setTeachers(new ArrayList());
+      academySingleton.setStudents(new ArrayList());
+      Human.setHumanIdCount(1);
+      // e.printStackTrace();
+      return;
+    }
   }
 
-  public static void loadCollectionsFromFiles() {
-    academySingleton.setStudents(
-        AcademyUtils.readListDataFromFile(
-            String.valueOf(academySingleton.saveFolder + "students.ser")));
-    academySingleton.setTeachers(
-        AcademyUtils.readListDataFromFile(
-            String.valueOf(academySingleton.saveFolder + "teachers.ser")));
-    academySingleton.setCourses(
-        AcademyUtils.readMapDataFromFile(
-            String.valueOf(academySingleton.saveFolder + "courses.ser")));
+  private static Archive loadArchiveFromFile(String file)
+      throws IOException, ClassNotFoundException, FileNotFoundException {
+
+    Archive archive = new Archive();
+    // TODO correct Exceptions вынести из метода
+
+    FileInputStream fis = new FileInputStream(file);
+    ObjectInputStream ois = new ObjectInputStream(fis);
+    archive = (Archive) ois.readObject();
+    ois.close();
+    return archive;
   }
 }

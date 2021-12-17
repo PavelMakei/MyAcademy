@@ -24,7 +24,7 @@ public final class RunAcademy {
 
     academySingleton = AcademySingleton.getInstance();
     academySingleton.initialize();
-    AcademyUtils.loadCollectionsFromFiles();
+    AcademyUtils.loadArchive();
     academySingleton.mainMenu();
   }
 

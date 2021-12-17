@@ -1,33 +1,28 @@
 package by.itacademy.pmakei.academy.entity;
 
-import by.itacademy.pmakei.academy.dao.BaseDao;
-import by.itacademy.pmakei.academy.enums.AllowedMark;
 import by.itacademy.pmakei.academy.exceptions.IncorrectHumanIdException;
-import by.itacademy.pmakei.academy.interfaces.Dao;
 import by.itacademy.pmakei.academy.utils.AcademyUtils;
 
 import java.io.File;
-import java.util.*;
-//TODO вынести обработку исключений по неверному ID  отдельный метод?
-//TODO перенести курсы на АррэйЛист?
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+// TODO вынести обработку исключений по неверному ID  отдельный метод?
+// TODO перенести курсы на АррэйЛист?
 public class AcademySingleton {
 
   // realize singleton:
   private static AcademySingleton academySingleton; // create PRIVATE STATIC reference
   public static StringBuilder saveFolder;
   public static StringBuilder logsFolder;
- // private Dao studentDAO;
- // private Dao teacherDAO;
-  //private Dao baseDAO;
   private List<Student> students;
   private List<Teacher> teachers;
-  private Map<String, Course> courses;
-  //private List <Course> courses;
+  private List<Course> courses;
   private AcademyUtils academyUtils;
 
-
   private
-  AcademySingleton() {}// PRIVATE constructor to avoid client applications to use constructor
+  AcademySingleton() {} // PRIVATE constructor to avoid client applications to use constructor
 
   public static AcademySingleton getInstance() {
     if (academySingleton == null) { // if there is no academy object
@@ -36,24 +31,18 @@ public class AcademySingleton {
     return academySingleton;
   }
 
-  //TODO удалить коммент  в итоговом
-  // Этот коммент для меня. String с конкатом загромождает память по причине
-  // стрингПула, StringBuffer для
-  // потокобезопасных, для остальных предпочтительнее StringBuilder
-
   public void initialize() {
 
-    //courses = new HashMap<String, Course>();
-
+    courses = new LinkedList<>();
     teachers = new ArrayList<>();
     students = new ArrayList<>();
-    //studentDAO = new BaseDao(students);
-   // teacherDAO = new BaseDao(teachers);
-
-
 
     // Общая папка
     StringBuilder commonFolder = new StringBuilder();
+    // TODO удалить коммент  в итоговом
+    // Этот коммент для меня. String с конкатом загромождает память по причине
+    // стрингПула, StringBuffer для
+    // потокобезопасных, для остальных предпочтительнее StringBuilder
 
     commonFolder
         .append("src")
@@ -87,16 +76,16 @@ public class AcademySingleton {
   }
 
   public List<Student> getStudents() {
-    //List list = new ArrayList(students);
+    // List list = new ArrayList(students);
     return this.students;
   }
 
   public List<Teacher> getTeachers() {
-    //List list = new ArrayList(teachers);
+    // List list = new ArrayList(teachers);
     return this.teachers;
   }
 
-  public Map<String, Course> getCourses() {
+  public List<Course> getCourses() {
     return courses;
   }
 
@@ -113,12 +102,12 @@ public class AcademySingleton {
     throw new IncorrectHumanIdException("", id); // TODO добавить текстовое поле?
   }
 
-    public Course getCourseByCourseName(String courseName) {
+  public Course getCourseByCourseName(String courseName) {
 
     Course course = null;
-    for (Map.Entry<String, Course> entry : courses.entrySet()) {
-      if (courseName.equals(entry.getKey())) {
-        course = entry.getValue();
+    for (Course courseObj : courses) {
+      if (courseName.equals(courseObj.getCourseName())) {
+        course = courseObj;
         break;
       }
     }
@@ -126,6 +115,18 @@ public class AcademySingleton {
   }
 
   public void mapTeacherToCourse() {
+    if (academySingleton.getTeachers().size() == 0) {
+      System.out.println("===========================================================");
+      System.out.println("Список преподавателей пуст");
+      System.out.println("===========================================================");
+      return;
+    }
+    if (academySingleton.getCourses().size() == 0) {
+      System.out.println("===========================================================");
+      System.out.println("Список курсов пуст");
+      System.out.println("===========================================================");
+      return;
+    }
 
     Teacher foundTeacher = null;
     Course foundCourse = null;
@@ -172,33 +173,6 @@ public class AcademySingleton {
     System.out.println("Преподаватель назначен на курс");
     System.out.println("===========================================================");
   }
-  // метод для мапинга по шаблону
-  // TODO в окончательном варианте - удалить
-//  public void mapTeacherToCourse(int idTeacher, String courseName) {
-//
-//    Teacher foundTeacher = null;
-//    Course foundCourse = null;
-//
-//    for (Teacher t : teachers) {
-//      if (t.getPersonalId() == (idTeacher)) {
-//        foundTeacher = t;
-//        break;
-//      }
-//    }
-//
-//    foundCourse = courses.get(courseName);
-//
-//    if (foundTeacher == null) {
-//      System.out.println("Teacher not found");
-//      return;
-//    } else if (foundCourse == null) {
-//      System.out.println("Course not found");
-//      return;
-//    } else {
-//      foundTeacher.setCourse(foundCourse);
-//      foundCourse.setTeacher(foundTeacher);
-//    }
-//  }
 
   public void addTeacher(String name, String surname, int age) {
     teachers.add(new Teacher(Human.getHumanId(), name, surname, age));
@@ -207,60 +181,22 @@ public class AcademySingleton {
   public void addStudent(String name, String surname, int age) {
     students.add(new Student(Human.getHumanId(), name, surname, age));
   }
-  // TODO Оставть добавление курса?
+  // TODO добавить принт списка курсов?
   public void addCourse(String courseName) {
-    courses.put(courseName, new Course(courseName));
-  }
-
-  private void setMark() { // todo add corect work with enum
-
-    //        Teacher teacher;
-    //        Student student;
-    //
-    //        printAllTeachers();
-    //        System.out.println();
-    //        int teacherId = getIdFromConsole("teacher");
-    //        Human human = getHumanById(teachers, teacherId);
-    //        if (human == null) {
-    //            System.out.println("Teacher with this id doesn't exist");
-    //            return;
-    //        } else {
-    //            teacher = (Teacher) human;
-    //        }
-    //
-    //        printAllStudents();
-    //        System.out.println();
-    //        int studentId = getIdFromConsole("student");
-    //        human = getHumanById(students, studentId);
-    //        if (human == null) {
-    //            System.out.println("Student with this id doesn't exist");
-    //            return;
-    //        } else {
-    //            student = (Student) human;
-    //        }
-    //        int markValue;
-    //        do {
-    //            AcademyUtils.clearScreen();
-    //            System.out.println("Set score (1-5) to student");
-    //            System.out.println(Arrays.toString(AllowedMark.values()));
-    //            int gotMarkValue = AcademyUtils.getIntFromConsole();
-    //            markValue = gotMarkValue < 1 || gotMarkValue > 5 ? 0 : gotMarkValue;
-    //
-    //        } while (markValue == 0);
-    //
-    //        String feedback;
-    //        AcademyUtils.clearScreen();
-    //        System.out.println("Write feedback");
-    //        feedback = AcademyUtils.getStringFromConsole();
-    //        teacher.setMark(student, (markValue - 1), feedback);//  real mark value 0-4, not 1-5
-
-  }
-
-  // TODO оставить метод?
-  public void processAddStudentToCourse(Student student, Course course) {
-
-    student.addCourse(course);
-    System.out.println("Student has been added to course");
+    if (academySingleton.getCourses().size() != 0) {
+      for (Course course : academySingleton.getCourses()) {
+        if (course.getCourseName().equals(courseName)) {
+          System.out.println("===========================================================");
+          System.out.println("Данный курс уже существует");
+          System.out.println("===========================================================");
+          return;
+        }
+      }
+    }
+    courses.add(new Course(courseName));
+    System.out.println("===========================================================");
+    System.out.println("Курс успешно добавлен");
+    System.out.println("===========================================================");
   }
 
   public void mainMenu() {
@@ -296,7 +232,7 @@ public class AcademySingleton {
           System.out.println("===========================================================");
           System.out.println("Выход");
           System.out.println("===========================================================");
-          AcademyUtils.saveCollectionsToFiles();
+          AcademyUtils.saveArchive();
           System.exit(0);
           break;
         default:
@@ -309,6 +245,12 @@ public class AcademySingleton {
   }
 
   private void studentMenu() {
+    if(getTeachers().size()==0){
+      System.out.println("===========================================================");
+      System.out.println("Список студентов пуст. Добавьте студента в меню администратора");
+      System.out.println("===========================================================");
+      return;
+    }
     System.out.println("Выберите студента");
     Student student;
     Object object;
@@ -413,6 +355,12 @@ public class AcademySingleton {
     Object object;
 
     while (true) {
+      if(getTeachers().size()==0){
+        System.out.println("===========================================================");
+        System.out.println("Список преподавателей пуст. Добавьте преподавателя в меню администратора");
+        System.out.println("===========================================================");
+        return;
+      }
       AcademyUtils.printAllTeachers(getTeachers());
       System.out.println("===========================================================");
       System.out.println("Введите Id преподавателя");
@@ -475,8 +423,9 @@ public class AcademySingleton {
       System.out.println("3. Просмотреть список курсов");
       System.out.println("4. Добавить преподавателя");
       System.out.println("5. Добавить студента");
-      System.out.println("6. Назначить преподавателя на курс");
-      System.out.println("0. Выход");
+      System.out.println("6. Добавить курс");
+      System.out.println("7. Назначить преподавателя на курс");
+      System.out.println("8. Выход");
       System.out.println("===========================================================");
 
       switch (AcademyUtils.getIntFromConsole()) {
@@ -512,6 +461,12 @@ public class AcademySingleton {
           break;
         case 6:
           System.out.println("===========================================================");
+          System.out.println("Добавить курс");
+          System.out.println("===========================================================");
+          createNewCourse();
+          break;
+        case 7:
+          System.out.println("===========================================================");
           System.out.println("Назначить преподавателя на курс");
           System.out.println("===========================================================");
           mapTeacherToCourse();
@@ -519,7 +474,7 @@ public class AcademySingleton {
 
           // TODO добавить остальные пункты
 
-        case 0:
+        case 8:
           System.out.println("===========================================================");
           System.out.println("Выход");
           System.out.println("===========================================================");
@@ -534,10 +489,14 @@ public class AcademySingleton {
     }
   }
 
+  private void createNewCourse() {
+    addCourse(getStringFromUser("название", "курса"));
+  }
+
   private void createNewStudent() {
     addStudent(
-        getNameOrSurnameFromUser("имя", "студента"),
-        getNameOrSurnameFromUser("фамилию", "студента"),
+        getStringFromUser("имя", "студента"),
+        getStringFromUser("фамилию", "студента"),
         getAgeFromUser());
 
     System.out.println("===========================================================");
@@ -547,8 +506,8 @@ public class AcademySingleton {
 
   private void createNewTeacher() {
     addTeacher(
-        getNameOrSurnameFromUser("имя", "преподавателя"),
-        getNameOrSurnameFromUser("фамилию", "преподавателя"),
+        getStringFromUser("имя", "преподавателя"),
+        getStringFromUser("фамилию", "преподавателя"),
         getAgeFromUser());
 
     System.out.println("===========================================================");
@@ -560,7 +519,7 @@ public class AcademySingleton {
     int age;
     while (true) {
       System.out.println("===========================================================");
-      System.out.println("Введите возрвст");
+      System.out.println("Введите возраст");
       System.out.println("===========================================================");
       age = AcademyUtils.getIntFromConsole();
 
@@ -574,9 +533,9 @@ public class AcademySingleton {
     }
   }
 
-  private String getNameOrSurnameFromUser(String nameOrSurname, String humanType) {
+  private String getStringFromUser(String string1, String string2) {
     System.out.println("===========================================================");
-    System.out.println("Введите " + nameOrSurname + " " + humanType);
+    System.out.println("Введите " + string1 + " " + string2);
     System.out.println("===========================================================");
     return AcademyUtils.getStringFromConsole();
   }
@@ -589,7 +548,7 @@ public class AcademySingleton {
     this.teachers = teachers;
   }
 
-  public void setCourses(Map courses) {
+  public void setCourses(List courses) {
     this.courses = courses;
   }
 }
