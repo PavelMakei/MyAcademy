@@ -1,48 +1,48 @@
 package by.itacademy.pmakei.academy.entity;
 
 import by.itacademy.pmakei.academy.dao.BaseDao;
-import by.itacademy.pmakei.academy.exceptions.IncorrectEnterException;
+import by.itacademy.pmakei.academy.exceptions.IncorrectHumanIdException;
 import by.itacademy.pmakei.academy.interfaces.Dao;
 import by.itacademy.pmakei.academy.utils.AcademyUtils;
 
 import java.io.File;
 import java.util.*;
-
-public class Academy {
+//TODO вынести обработку исключений по неверному ID  отдельный метод?
+public class AcademySingleton {
 
   // realize singleton:
-  private static Academy academy; // create PRIVATE STATIC reference
-
-  private Academy() {} // PRIVATE constructor to avoid client applications to use constructor
-
-  public static Academy getInstance() {
-    if (academy == null) { // if there is no academy object
-      academy = new Academy(); // create academy object
-    }
-    return academy;
-  }
-
-  public static StringBuilder
-      inputFolder; // String с конкатом загромождает память по причине стрингПула, StringBuffer для
-  // потокобезопасных, для остальных предпочтительнее StringBuilder
-  public static StringBuilder outputFolder;
+  private static AcademySingleton academySingleton; // create PRIVATE STATIC reference
+  public static StringBuilder saveFolder;
   public static StringBuilder logsFolder;
-
   private Dao studentDAO;
   private Dao teacherDAO;
   private Dao baseDAO;
-
   private List<Student> students;
   private List<Teacher> teachers;
-  private HashMap<String, Course> courses;
+  private Map<String, Course> courses;
   private AcademyUtils academyUtils;
+
+
+  private
+  AcademySingleton() {}// PRIVATE constructor to avoid client applications to use constructor
+
+  public static AcademySingleton getInstance() {
+    if (academySingleton == null) { // if there is no academy object
+      academySingleton = new AcademySingleton(); // create academy object
+    }
+    return academySingleton;
+  }
+
+  //TODO удалить коммент  в итоговом
+  // Этот коммент для меня. String с конкатом загромождает память по причине
+  // стрингПула, StringBuffer для
+  // потокобезопасных, для остальных предпочтительнее StringBuilder
 
   public void initialize() {
 
     courses = new HashMap<String, Course>();
     teachers = new ArrayList<>();
     students = new ArrayList<>();
-
     studentDAO = new BaseDao(students);
     teacherDAO = new BaseDao(teachers);
 
@@ -61,49 +61,40 @@ public class Academy {
         .append("academy")
         .append(File.separator);
 
-    // Папка с входными файлами
-    inputFolder = new StringBuilder();
-    inputFolder
+    // Папка для сохранения
+    saveFolder = new StringBuilder();
+    saveFolder
         .append(commonFolder)
-        .append("files")
+        .append("file")
         .append(File.separator)
-        .append("input")
-        .append(File.separator);
-
-    // Папка с выходными файлами
-    outputFolder = new StringBuilder();
-    outputFolder
-        .append(commonFolder)
-        .append("files")
-        .append(File.separator)
-        .append("output")
+        .append("save")
         .append(File.separator);
 
     // Папка с логами
     logsFolder = new StringBuilder();
     logsFolder
         .append(commonFolder)
-        .append("files")
+        .append("file")
         .append(File.separator)
         .append("logs")
         .append(File.separator);
   }
 
-  public List<Student> getCopyStudents() {
-    List list = new ArrayList(students);
-    return (List<Student>) list;
+  public List<Student> getStudents() {
+    //List list = new ArrayList(students);
+    return this.students;
   }
 
-  public List<Teacher> getCopyTeachers() {
-    List list = new ArrayList(teachers);
-    return (List) list;
+  public List<Teacher> getTeachers() {
+    //List list = new ArrayList(teachers);
+    return this.teachers;
   }
 
-  public HashMap<String, Course> getCourses() {
+  public Map<String, Course> getCourses() {
     return courses;
   }
 
-  public Human getHumanById(List list, int id) {
+  public Human getHumanById(List list, int id) throws IncorrectHumanIdException {
 
     Human human;
     Iterator<Human> it = list.iterator();
@@ -113,27 +104,10 @@ public class Academy {
         return human;
       }
     }
-    return null;
+    throw new IncorrectHumanIdException("", id); // TODO добавить текстовое поле?
   }
 
-  //  private void printAllStudents() {
-  //
-  //    for (Student s : students) {
-  //
-  //      System.out.println(
-  //          "Id - "
-  //              + s.getPersonalId()
-  //              + "; Name - "
-  //              + s.getName()
-  //              + "; Surname - "
-  //              + s.getSurname()
-  //              + "; age - "
-  //              + s.getAge()
-  //              + ";");
-  //    }
-  //  }
-
-  public Course getCourseByCourseName(String courseName) {
+    public Course getCourseByCourseName(String courseName) {
 
     Course course = null;
     for (Map.Entry<String, Course> entry : courses.entrySet()) {
@@ -149,20 +123,21 @@ public class Academy {
 
     Teacher foundTeacher = null;
     Course foundCourse = null;
-    Object object;
+    Human human = null;
+    Course course = null;
     while (true) {
-      AcademyUtils.printAllTeachers(getCopyTeachers());
+      AcademyUtils.printAllTeachers(getTeachers());
       System.out.println("===========================================================");
       System.out.println("Введите Id преподавателя");
       System.out.println("===========================================================");
-      object = getHumanById(getCopyTeachers(), AcademyUtils.getIntFromConsole());
-      if (object == null) {
+      try {
+        human = getHumanById(getTeachers(), AcademyUtils.getIntFromConsole());
+        foundTeacher = (Teacher) human;
+        break;
+      } catch (IncorrectHumanIdException ex) { // TODO добавить логирование?
         System.out.println("===========================================================");
         System.out.println("Введены некорректные данные, повторите");
         System.out.println("===========================================================");
-      } else {
-        foundTeacher = (Teacher) object;
-        break;
       }
     }
     while (true) {
@@ -170,13 +145,13 @@ public class Academy {
       System.out.println("===========================================================");
       System.out.println("Введите название курса");
       System.out.println("===========================================================");
-      object = getCourseByCourseName(AcademyUtils.getStringFromConsole());
-      if (object == null) {
+      course = getCourseByCourseName(AcademyUtils.getStringFromConsole());
+      if (course == null) {
         System.out.println("===========================================================");
         System.out.println("Введены некорректные данные, повторите");
         System.out.println("===========================================================");
       } else {
-        foundCourse = (Course) object;
+        foundCourse = (Course) course;
         break;
       }
     }
@@ -331,18 +306,19 @@ public class Academy {
     Student student;
     Object object;
     while (true) {
-      AcademyUtils.printAllStudents(getCopyStudents());
+      AcademyUtils.printAllStudents(getStudents());
       System.out.println("===========================================================");
       System.out.println("Введите Id студента");
       System.out.println("===========================================================");
-      object = getHumanById(getCopyStudents(), AcademyUtils.getIntFromConsole());
-      if (object == null) {
+      try {
+        object = getHumanById(getStudents(), AcademyUtils.getIntFromConsole());
+        student = (Student) object;
+        break;
+      } catch (IncorrectHumanIdException ex) { // TODO добавить логирование?
+
         System.out.println("===========================================================");
         System.out.println("Введён некорректный Id, повторите");
         System.out.println("===========================================================");
-      } else {
-        student = (Student) object;
-        break;
       }
     }
     while (true) {
@@ -384,7 +360,6 @@ public class Academy {
   }
 
   private void addStudentToCourse(Student student) { // TODO optimize
-    Object object;
     Course course;
     while (true) {
 
@@ -392,16 +367,15 @@ public class Academy {
       System.out.println("===========================================================");
       System.out.println("Введите название курса");
       System.out.println("===========================================================");
-      object = getCourseByCourseName(AcademyUtils.getStringFromConsole());
+      course = getCourseByCourseName(AcademyUtils.getStringFromConsole());
 
-      if (object == null) {
+      if (course == null) {
         System.out.println("===========================================================");
         System.out.println("Введены некорректные данные, повторите");
         System.out.println("===========================================================");
         continue;
       }
       boolean isStudentRegistred = false;
-      course = (Course) object;
       // проверить наличие
       if (student.getCourses().size() != 0) { // если список курсов студента не равен 0
 
@@ -432,22 +406,22 @@ public class Academy {
     Object object;
 
     while (true) {
-      AcademyUtils.printAllTeachers(getCopyTeachers());
+      AcademyUtils.printAllTeachers(getTeachers());
       System.out.println("===========================================================");
       System.out.println("Введите Id преподавателя");
       System.out.println("===========================================================");
-      object = getHumanById(getCopyTeachers(), AcademyUtils.getIntFromConsole());
-      if (object == null) {
+      try {
+        object = getHumanById(getTeachers(), AcademyUtils.getIntFromConsole());
+        teacher = (Teacher) object;
+        break;
+      } catch (IncorrectHumanIdException ex) { // TODO добавить логирование?
         System.out.println("===========================================================");
         System.out.println("Введён некорректный Id, повторите");
         System.out.println("===========================================================");
-      } else {
-        teacher = (Teacher) object;
-        break;
       }
     }
 
-      while (true) {
+    while (true) {
       System.out.println("===========================================================");
       System.out.println("Выберите действие:");
       System.out.println("1. Просмотреть список учеников на курсе");
@@ -470,8 +444,6 @@ public class Academy {
           AcademyUtils.setMarkToStudent(teacher);
           break;
 
-
-
         case 3:
           System.out.println("===========================================================");
           System.out.println("Выход");
@@ -484,7 +456,6 @@ public class Academy {
           System.out.println("===========================================================");
           break;
       }
-
     }
   }
 
@@ -585,17 +556,13 @@ public class Academy {
       System.out.println("Введите возрвст");
       System.out.println("===========================================================");
       age = AcademyUtils.getIntFromConsole();
-      try {
-        if (age < 18 || age > 100) {
-          throw new IncorrectEnterException("entered int age <18 or >100", age);
-        }
-        return age;
-      } catch (IncorrectEnterException e) {
+
+      if (age < 18 || age > 100) {
         System.out.println("===========================================================");
         System.out.println("Введите возрвст (целое число от 18 до 100)");
         System.out.println("===========================================================");
-
-        // TODO ptint to log e.printStackTrace();
+      } else {
+        return age;
       }
     }
   }
@@ -605,5 +572,17 @@ public class Academy {
     System.out.println("Введите " + nameOrSurname + " " + humanType);
     System.out.println("===========================================================");
     return AcademyUtils.getStringFromConsole();
+  }
+
+  public void setStudents(List students) {
+    this.students = students;
+  }
+
+  public void setTeachers(List teachers) {
+    this.teachers = teachers;
+  }
+
+  public void setCourses(Map courses) {
+    this.courses = courses;
   }
 }

@@ -1,6 +1,8 @@
 package by.itacademy.pmakei.academy.entity;
 
-public abstract class Human implements Comparable{
+import java.io.Serializable;
+
+public abstract class Human implements Comparable, Serializable {
 
     private static int humanIdCount = 1;
 

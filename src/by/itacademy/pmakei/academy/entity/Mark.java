@@ -1,8 +1,9 @@
 package by.itacademy.pmakei.academy.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Mark implements Comparable{
+public class Mark implements Comparable, Serializable {
 
     private int value;
     private Course course;

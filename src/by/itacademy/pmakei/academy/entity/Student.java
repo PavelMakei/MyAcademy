@@ -1,12 +1,13 @@
 package by.itacademy.pmakei.academy.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Student extends Human {
 
     private ArrayList<Course> courses = new ArrayList<>();
     private ArrayList<Mark> marks = new ArrayList<>();
-
+    //TODO обработка/регистрация законченных курсов?
 
     public Student(int humanId, String name, String sureName, int age) {
         super(humanId, name, sureName, age);

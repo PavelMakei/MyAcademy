@@ -1,8 +1,9 @@
 package by.itacademy.pmakei.academy.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Course {
+public class Course implements Serializable {
 
     String courseName;
     Teacher teacher;
