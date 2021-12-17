@@ -1,6 +1,7 @@
 package by.itacademy.pmakei.academy.entity;
 
 import by.itacademy.pmakei.academy.dao.BaseDao;
+import by.itacademy.pmakei.academy.enums.AllowedMark;
 import by.itacademy.pmakei.academy.exceptions.IncorrectHumanIdException;
 import by.itacademy.pmakei.academy.interfaces.Dao;
 import by.itacademy.pmakei.academy.utils.AcademyUtils;
@@ -8,18 +9,20 @@ import by.itacademy.pmakei.academy.utils.AcademyUtils;
 import java.io.File;
 import java.util.*;
 //TODO вынести обработку исключений по неверному ID  отдельный метод?
+//TODO перенести курсы на АррэйЛист?
 public class AcademySingleton {
 
   // realize singleton:
   private static AcademySingleton academySingleton; // create PRIVATE STATIC reference
   public static StringBuilder saveFolder;
   public static StringBuilder logsFolder;
-  private Dao studentDAO;
-  private Dao teacherDAO;
-  private Dao baseDAO;
+ // private Dao studentDAO;
+ // private Dao teacherDAO;
+  //private Dao baseDAO;
   private List<Student> students;
   private List<Teacher> teachers;
   private Map<String, Course> courses;
+  //private List <Course> courses;
   private AcademyUtils academyUtils;
 
 
@@ -40,11 +43,14 @@ public class AcademySingleton {
 
   public void initialize() {
 
-    courses = new HashMap<String, Course>();
+    //courses = new HashMap<String, Course>();
+
     teachers = new ArrayList<>();
     students = new ArrayList<>();
-    studentDAO = new BaseDao(students);
-    teacherDAO = new BaseDao(teachers);
+    //studentDAO = new BaseDao(students);
+   // teacherDAO = new BaseDao(teachers);
+
+
 
     // Общая папка
     StringBuilder commonFolder = new StringBuilder();
@@ -168,38 +174,38 @@ public class AcademySingleton {
   }
   // метод для мапинга по шаблону
   // TODO в окончательном варианте - удалить
-  public void mapTeacherToCourse(int idTeacher, String courseName) {
-
-    Teacher foundTeacher = null;
-    Course foundCourse = null;
-
-    for (Teacher t : teachers) {
-      if (t.getPersonalId() == (idTeacher)) {
-        foundTeacher = t;
-        break;
-      }
-    }
-
-    foundCourse = courses.get(courseName);
-
-    if (foundTeacher == null) {
-      System.out.println("Teacher not found");
-      return;
-    } else if (foundCourse == null) {
-      System.out.println("Course not found");
-      return;
-    } else {
-      foundTeacher.setCourse(foundCourse);
-      foundCourse.setTeacher(foundTeacher);
-    }
-  }
+//  public void mapTeacherToCourse(int idTeacher, String courseName) {
+//
+//    Teacher foundTeacher = null;
+//    Course foundCourse = null;
+//
+//    for (Teacher t : teachers) {
+//      if (t.getPersonalId() == (idTeacher)) {
+//        foundTeacher = t;
+//        break;
+//      }
+//    }
+//
+//    foundCourse = courses.get(courseName);
+//
+//    if (foundTeacher == null) {
+//      System.out.println("Teacher not found");
+//      return;
+//    } else if (foundCourse == null) {
+//      System.out.println("Course not found");
+//      return;
+//    } else {
+//      foundTeacher.setCourse(foundCourse);
+//      foundCourse.setTeacher(foundTeacher);
+//    }
+//  }
 
   public void addTeacher(String name, String surname, int age) {
-    teacherDAO.add(new Teacher(Human.getHumanId(), name, surname, age));
+    teachers.add(new Teacher(Human.getHumanId(), name, surname, age));
   }
 
   public void addStudent(String name, String surname, int age) {
-    studentDAO.add(new Student(Human.getHumanId(), name, surname, age));
+    students.add(new Student(Human.getHumanId(), name, surname, age));
   }
   // TODO Оставть добавление курса?
   public void addCourse(String courseName) {
@@ -290,6 +296,7 @@ public class AcademySingleton {
           System.out.println("===========================================================");
           System.out.println("Выход");
           System.out.println("===========================================================");
+          AcademyUtils.saveCollectionsToFiles();
           System.exit(0);
           break;
         default:

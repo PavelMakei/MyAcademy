@@ -180,21 +180,29 @@ public final class AcademyUtils {
   public static void setMarkToStudent(Teacher teacher) {
 
     /*TODO
-    1. if teacher has course
-    2. get studentsOnCourse
-    3. select student
-    4. check if student has mark on this course/ or delete from course after mark settings?
-    5. get from user mark value
-    6. get feedback from user
-    7. add mark
-    8. del student from course?
+
+    1. delete from course after mark settings?
+    2. del student from course?
      */
 
-    List studentOnCourse = getListStudentsOnCourse(teacher.getCourse());
     Student student;
     Object human;
     Course teachersCourse;
-    boolean hasMarkOnThisCourse = false;
+    List studentOnCourse;
+    List marks;
+    Mark mark;
+    int markValue;
+    String feedback;
+
+    teachersCourse = teacher.getCourse();
+    if (teachersCourse == null) {
+      System.out.println("===========================================================");
+      System.out.println(
+          "Преподаватель " + teacher.getName() + " " + teacher.getSurname() + " не ведёт курсы");
+      System.out.println("===========================================================");
+      return;
+    }
+    studentOnCourse = getListStudentsOnCourse(teacher.getCourse());
     while (true) {
 
       System.out.println("===========================================================");
@@ -212,11 +220,45 @@ public final class AcademyUtils {
       student = (Student) human;
       break;
     }
-    for (Mark marks : student.getMarks()) {}
+    marks = student.getMarks();
+    if (marks.size() != 0) {
+      for (Object objMark : marks) {
+        mark = (Mark) objMark;
+        if (mark.getCourse().equals(teachersCourse)) {
+          System.out.println("===========================================================");
+          System.out.println(
+              "Оценка студенту "
+                  + student.getName()
+                  + " "
+                  + student.getSurname()
+                  + " уже быда выставлена");
+          System.out.println("===========================================================");
+          return;
+        }
+      }
+    }
+    while (true) {
+      System.out.println("===========================================================");
+      System.out.println("Ввеите оценку студенту от 1 до 5");
+      System.out.println("===========================================================");
+      markValue = AcademyUtils.getIntFromConsole();
+      if (markValue == 0) {
+        System.out.println("===========================================================");
+        System.out.println("Введено некорректное значение, повторите");
+        System.out.println("===========================================================");
+      } else {
+        break;
+      }
+    }
+    System.out.println("===========================================================");
+    System.out.println("Ввеите отзыв о студенте");
+    System.out.println("===========================================================");
+    feedback = getStringFromConsole();
+    student.setMark(new Mark(teacher,teachersCourse,markValue,feedback));
   }
 
   public static void saveListDataTofile(List list, String file) {
-    // TODO correct exceptions
+    // TODO correct exceptions ПРОБРОСИТЬ!!!д
 
     try {
       FileOutputStream fos = new FileOutputStream(file);
@@ -230,7 +272,7 @@ public final class AcademyUtils {
   }
 
   public static List readListDataFromFile(String file) {
-      List list = new ArrayList();
+    List list = new ArrayList();
     // TODO correct Exceptions
     try {
       FileInputStream fis = new FileInputStream(file);
@@ -240,7 +282,7 @@ public final class AcademyUtils {
       return list;
     } catch (FileNotFoundException e) {
       e.printStackTrace();
-      return new ArrayList();// возврат пустого некоррумпированного листа
+      return new ArrayList(); // возврат пустого некоррумпированного листа
     } catch (IOException e) {
       e.printStackTrace();
       return new ArrayList();
@@ -249,6 +291,7 @@ public final class AcademyUtils {
       return new ArrayList();
     }
   }
+
   public static void saveMapDataTofile(Map map, String file) {
     // TODO correct exceptions
 
@@ -262,6 +305,7 @@ public final class AcademyUtils {
       ioe.printStackTrace();
     }
   }
+
   public static Map readMapDataFromFile(String file) {
     Map map = new HashMap();
     // TODO correct Exceptions
@@ -273,7 +317,7 @@ public final class AcademyUtils {
       return map;
     } catch (FileNotFoundException e) {
       e.printStackTrace();
-      return new HashMap();// возврат пустой некоррумпированной мапы
+      return new HashMap(); // возврат пустой некоррумпированной мапы
     } catch (IOException e) {
       e.printStackTrace();
       return new HashMap();
@@ -281,5 +325,28 @@ public final class AcademyUtils {
       e.printStackTrace();
       return new HashMap();
     }
+  }
+
+  public static void saveCollectionsToFiles() {
+    AcademyUtils.saveListDataTofile(
+        academySingleton.getStudents(),
+        String.valueOf(academySingleton.saveFolder + "students.ser"));
+    AcademyUtils.saveListDataTofile(
+        academySingleton.getTeachers(),
+        String.valueOf(academySingleton.saveFolder + "teachers.ser"));
+    AcademyUtils.saveMapDataTofile(
+        academySingleton.getCourses(), String.valueOf(academySingleton.saveFolder + "courses.ser"));
+  }
+
+  public static void loadCollectionsFromFiles() {
+    academySingleton.setStudents(
+        AcademyUtils.readListDataFromFile(
+            String.valueOf(academySingleton.saveFolder + "students.ser")));
+    academySingleton.setTeachers(
+        AcademyUtils.readListDataFromFile(
+            String.valueOf(academySingleton.saveFolder + "teachers.ser")));
+    academySingleton.setCourses(
+        AcademyUtils.readMapDataFromFile(
+            String.valueOf(academySingleton.saveFolder + "courses.ser")));
   }
 }

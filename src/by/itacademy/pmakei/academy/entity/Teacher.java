@@ -22,13 +22,13 @@ public class Teacher extends Human{
         return course;
     }
 
-    public void setMark(Student student, int markValue, String feedback) {
-        if (student.getCourses().contains(course)) {
-            student.setMark(new Mark(this, course, markValue, feedback ));
-        } else {
-            System.out.println("Student doesn't join this course");
-        }
-    }
+//    public void setMark(Student student, int markValue, String feedback) {
+//        if (student.getCourses().contains(course)) {
+//            student.setMark(new Mark(this, course, markValue, feedback ));
+//        } else {
+//            System.out.println("Student doesn't join this course");
+//        }
+//    }
 
     @Override
     public boolean equals(Object o) {

@@ -51,13 +51,19 @@ public abstract class Human implements Comparable, Serializable {
         return name;
     }
 
-
     public String getSurname() {
         return surname;
     }
 
     public int getAge() {
         return age;
+    }
+
+    public void setHumanIdCount(int id){
+        this.humanIdCount = id;
+    }
+    public int getHumanIdCount(){
+        return humanIdCount;
     }
 
 

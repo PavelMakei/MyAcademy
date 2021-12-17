@@ -2,11 +2,12 @@ package by.itacademy.pmakei.academy.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Student extends Human {
 
-    private ArrayList<Course> courses = new ArrayList<>();
-    private ArrayList<Mark> marks = new ArrayList<>();
+    private List<Course> courses = new ArrayList<>();
+    private List<Mark> marks = new ArrayList<>();
     //TODO обработка/регистрация законченных курсов?
 
     public Student(int humanId, String name, String sureName, int age) {
@@ -17,15 +18,15 @@ public class Student extends Human {
         courses.add(c);
     }
 
-    public void setMark(Mark e) {
-        marks.add(e);
+    public void setMark(Mark mark) {
+        marks.add(mark);
     }
 
-    public ArrayList<Course> getCourses() {
+    public List<Course> getCourses() {
         return courses;
     }
 
-    public ArrayList<Mark> getMarks() {
+    public List<Mark> getMarks() {
         return marks;
     }
 

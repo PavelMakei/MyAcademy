@@ -24,20 +24,10 @@ public final class RunAcademy {
 
     academySingleton = AcademySingleton.getInstance();
     academySingleton.initialize();
-    loadCollectionsFromFiles();
+    AcademyUtils.loadCollectionsFromFiles();
     academySingleton.mainMenu();
   }
 
-  private void saveCollectionsToFiles() {
-    AcademyUtils.saveListDataTofile(academySingleton.getStudents(), String.valueOf(academySingleton.saveFolder + "students.ser"));
-    AcademyUtils.saveListDataTofile(academySingleton.getStudents(), String.valueOf(academySingleton.saveFolder + "teachers.ser"));
-    AcademyUtils.saveMapDataTofile(academySingleton.getCourses(), String.valueOf(academySingleton.saveFolder + "courses.ser"));
-  }
 
-  private void loadCollectionsFromFiles() {
-    academySingleton.setStudents(AcademyUtils.readListDataFromFile(String.valueOf(academySingleton.saveFolder + "students.ser")));
-    academySingleton.setTeachers(AcademyUtils.readListDataFromFile(String.valueOf(academySingleton.saveFolder + "teachers.ser")));
-    academySingleton.setCourses(AcademyUtils.readMapDataFromFile(String.valueOf(academySingleton.saveFolder + "courses.ser")));
-  }
 
 }
