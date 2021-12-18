@@ -29,19 +29,19 @@ public final class AcademyUtils {
     for (Object t : teachers) {
       Teacher teacher = (Teacher) t;
       System.out.println(
-          "Id - "
+          "Id- "
               + teacher.getPersonalId()
               + "; "
-              + "имя и фамилия - "
+//              + "имя и фамилия - "
               + teacher.getName()
               + " "
               + teacher.getSurname()
               + "; "
-              + "возраст - "
+              + "возраст- "
               + teacher.getAge()
               + "; ");
       System.out.println(
-          "курс - "
+          "курс- "
               + (teacher.getCourse() == null
                   ? "не назначен на курс \n"
                   : teacher.getCourse().getCourseName() + ".\n"));
@@ -61,15 +61,15 @@ public final class AcademyUtils {
     for (Object s : students) {
       Student student = (Student) s;
       System.out.println(
-          "Id - "
+          "Id- "
               + student.getPersonalId()
               + "; "
-              + "имя и фамилия - "
+//              + "имя и фамилия - "
               + student.getName()
               + " "
               + student.getSurname()
               + "; "
-              + "возраст - "
+              + "возраст- "
               + student.getAge()
               + "; ");
       if (student.getCourses().size() == 0) {
@@ -80,14 +80,6 @@ public final class AcademyUtils {
           System.out.println(course.getCourseName() + ";");
         }
       }
-      System.out.println();
-    }
-  }
-
-  public static void clearScreen() {
-
-    // this method doesn't really clear screen. but make  some new text  more noticeable
-    for (int i = 0; i < 20; i++) {
       System.out.println();
     }
   }
@@ -109,9 +101,8 @@ public final class AcademyUtils {
     Course course = null;
 
     do {
-      clearScreen();
 
-      System.out.println("Введите название кукрса: \n");
+      System.out.println("Введите название курса: \n");
       System.out.println("Доступные курсы");
       AcademyUtils.printAllCourses();
       String courseNameFromUser = getStringFromConsole();
@@ -180,11 +171,9 @@ public final class AcademyUtils {
   }
 
   public static void setMarkToStudent(Teacher teacher) {
-
-    /*TODO
-
+    /*
     1. delete from course after mark settings?
-    2. del student from course?
+    2. del student from course after marking?
      */
 
     Student student;
@@ -264,45 +253,12 @@ public final class AcademyUtils {
     System.out.println("===========================================================");
     feedback = getStringFromConsole();
     student.setMark(new Mark(teacher, teachersCourse, markValue, feedback));
-  }
-
-  public static void saveListDataTofile(List list, String file) {
-    // TODO correct exceptions ПРОБРОСИТЬ!!!д
-
-    try {
-      FileOutputStream fos = new FileOutputStream(file);
-      ObjectOutputStream oos = new ObjectOutputStream(fos);
-      oos.writeObject(list);
-      oos.close();
-      fos.close();
-    } catch (IOException ioe) {
-      ioe.printStackTrace();
-    }
-  }
-
-  public static List readListDataFromFile(String file) {
-    List list = new ArrayList();
-    // TODO correct Exceptions
-    try {
-      FileInputStream fis = new FileInputStream(file);
-      ObjectInputStream ois = new ObjectInputStream(fis);
-      list = (List) ois.readObject();
-      ois.close();
-      return list;
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      return new ArrayList(); // возврат пустого некоррумпированного листа
-    } catch (IOException e) {
-      e.printStackTrace();
-      return new ArrayList();
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-      return new ArrayList();
-    }
+    System.out.println("===========================================================");
+    System.out.println("Оценка успешно добавлена");
+    System.out.println("===========================================================");
   }
 
   public static void saveArchiveDataTofile(Archive archive, String file) throws IOException {
-    // TODO correct exceptions ПРОБРОСИТЬ!!!д
 
     FileOutputStream fos = new FileOutputStream(file);
     ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -313,12 +269,20 @@ public final class AcademyUtils {
 
   public static void saveArchive() {
     Archive archive = new Archive();
+
     archive.setCourses(academySingleton.getCourses());
     archive.setStudents(academySingleton.getStudents());
     archive.setTeachers(academySingleton.getTeachers());
     archive.setHumanIdCount(Human.getHumanId());
     try {
       saveArchiveDataTofile(archive, String.valueOf(academySingleton.saveFolder) + "save.ser");
+      System.out.println("===========================================================");
+      System.out.println("Архив успешно записан");
+      System.out.println(
+          "Расположение архива:"
+              + new File(String.valueOf(academySingleton.saveFolder) + "save.ser")
+                  .getAbsolutePath());
+      System.out.println("===========================================================");
     } catch (IOException e) {
       System.out.println("===========================================================");
       System.out.println("Внимание! Произошла ошибка записи архива!");
@@ -342,7 +306,7 @@ public final class AcademyUtils {
       academySingleton.setStudents(archive.getStudents());
       Human.setHumanIdCount(archive.getHumanIdCount());
       System.out.println("===========================================================");
-      System.out.println("Внимание! Файлы архва успешно загружены");
+      System.out.println("Архив успешно загружен");
       System.out.println("===========================================================");
       return;
     } catch (FileNotFoundException e) {
@@ -358,7 +322,8 @@ public final class AcademyUtils {
       academySingleton.setTeachers(new ArrayList());
       academySingleton.setStudents(new ArrayList());
       Human.setHumanIdCount(1);
-      // e.printStackTrace();
+      Logger.writeLogToFile("Файл не найден "+ new File(String.valueOf(academySingleton.saveFolder) + "save.ser")
+              .getAbsolutePath());
       return;
 
     } catch (ClassNotFoundException e) {
@@ -374,7 +339,8 @@ public final class AcademyUtils {
       academySingleton.setTeachers(new ArrayList());
       academySingleton.setStudents(new ArrayList());
       Human.setHumanIdCount(1);
-      // e.printStackTrace();
+      Logger.writeLogToFile("Класс не найден "+ new File(String.valueOf(academySingleton.saveFolder) + "save.ser")
+              .getAbsolutePath());
       return;
     } catch (IOException e) {
       System.out.println("===========================================================");
@@ -389,7 +355,8 @@ public final class AcademyUtils {
       academySingleton.setTeachers(new ArrayList());
       academySingleton.setStudents(new ArrayList());
       Human.setHumanIdCount(1);
-      // e.printStackTrace();
+      Logger.writeLogToFile("Ошибка чтения файла "+ new File(String.valueOf(academySingleton.saveFolder) + "save.ser")
+              .getAbsolutePath());
       return;
     }
   }
@@ -398,7 +365,6 @@ public final class AcademyUtils {
       throws IOException, ClassNotFoundException, FileNotFoundException {
 
     Archive archive = new Archive();
-    // TODO correct Exceptions вынести из метода
 
     FileInputStream fis = new FileInputStream(file);
     ObjectInputStream ois = new ObjectInputStream(fis);

@@ -20,8 +20,6 @@ public final class RunAcademy {
 
   private void run() {
 
-    // TODO Create, Initialize, Work
-
     academySingleton = AcademySingleton.getInstance();
     academySingleton.initialize();
     AcademyUtils.loadArchive();

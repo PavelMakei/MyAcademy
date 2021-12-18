@@ -25,8 +25,8 @@ public class AcademySingleton {
   AcademySingleton() {} // PRIVATE constructor to avoid client applications to use constructor
 
   public static AcademySingleton getInstance() {
-    if (academySingleton == null) { // if there is no academy object
-      academySingleton = new AcademySingleton(); // create academy object
+    if (academySingleton == null) {
+      academySingleton = new AcademySingleton();
     }
     return academySingleton;
   }

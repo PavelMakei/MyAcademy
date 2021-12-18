@@ -7,9 +7,9 @@ import java.util.Comparator;
 public class ComparatorHumanBySurname implements Comparator<Human> {
 
     @Override
-    public int compare(Human o1, Human o2) {
-        String str1 = o1.getSurname();
-        String str2 = o2.getSurname();
+    public int compare(Human h1, Human h2) {
+        String str1 = h1.getSurname();
+        String str2 = h2.getSurname();
         return str1.compareTo(str2);
     }
 }
