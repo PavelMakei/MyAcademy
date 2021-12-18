@@ -8,7 +8,7 @@ public class IncorrectHumanIdException extends Exception{
     public int getNumber(){return enteredIdvalue;}
     public IncorrectHumanIdException (String message, int id) {
 
-        super(message);
+        super(message + " " + id);
         enteredIdvalue = id;
     }
 }

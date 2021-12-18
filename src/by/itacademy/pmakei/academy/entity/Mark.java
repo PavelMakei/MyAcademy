@@ -9,7 +9,7 @@ public class Mark implements Comparable, Serializable {
     private Course course;
     private Teacher teacher;
     private String feedback;
-    //private AllowedMark value2;
+    //TODO private AllowedMark value2;
 
     public Mark(Teacher teacher, Course course, int i, String feedback) {
         this.course = course;

@@ -2,6 +2,7 @@ package by.itacademy.pmakei.academy.entity;
 
 import by.itacademy.pmakei.academy.exceptions.IncorrectHumanIdException;
 import by.itacademy.pmakei.academy.utils.AcademyUtils;
+import by.itacademy.pmakei.academy.utils.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,13 +10,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 // TODO вынести обработку исключений по неверному ID  отдельный метод?
-// TODO перенести курсы на АррэйЛист?
+
 public class AcademySingleton {
 
   // realize singleton:
   private static AcademySingleton academySingleton; // create PRIVATE STATIC reference
   public static StringBuilder saveFolder;
-  public static StringBuilder logsFolder;
   private List<Student> students;
   private List<Teacher> teachers;
   private List<Course> courses;
@@ -37,14 +37,9 @@ public class AcademySingleton {
     teachers = new ArrayList<>();
     students = new ArrayList<>();
 
-    // Общая папка
-    StringBuilder commonFolder = new StringBuilder();
-    // TODO удалить коммент  в итоговом
-    // Этот коммент для меня. String с конкатом загромождает память по причине
-    // стрингПула, StringBuffer для
-    // потокобезопасных, для остальных предпочтительнее StringBuilder
-
-    commonFolder
+    // Папка для сохранения
+    saveFolder = new StringBuilder();
+    saveFolder
         .append("src")
         .append(File.separator)
         .append("by")
@@ -54,26 +49,12 @@ public class AcademySingleton {
         .append("pmakei")
         .append(File.separator)
         .append("academy")
-        .append(File.separator);
-
-    // Папка для сохранения
-    saveFolder = new StringBuilder();
-    saveFolder
-        .append(commonFolder)
+        .append(File.separator)
         .append("file")
         .append(File.separator)
         .append("save")
         .append(File.separator);
-
-    // Папка с логами
-    logsFolder = new StringBuilder();
-    logsFolder
-        .append(commonFolder)
-        .append("file")
-        .append(File.separator)
-        .append("logs")
-        .append(File.separator);
-  }
+      }
 
   public List<Student> getStudents() {
     // List list = new ArrayList(students);
@@ -99,7 +80,7 @@ public class AcademySingleton {
         return human;
       }
     }
-    throw new IncorrectHumanIdException("", id); // TODO добавить текстовое поле?
+    throw new IncorrectHumanIdException("Введён некорректный Id", id);
   }
 
   public Course getCourseByCourseName(String courseName) {
@@ -141,10 +122,11 @@ public class AcademySingleton {
         human = getHumanById(getTeachers(), AcademyUtils.getIntFromConsole());
         foundTeacher = (Teacher) human;
         break;
-      } catch (IncorrectHumanIdException ex) { // TODO добавить логирование?
+      } catch (IncorrectHumanIdException ex) { // TODO добавить данные в логирование?
         System.out.println("===========================================================");
         System.out.println("Введены некорректные данные, повторите");
         System.out.println("===========================================================");
+        Logger.writeLogToFile(ex);
       }
     }
     while (true) {
@@ -163,7 +145,6 @@ public class AcademySingleton {
       }
     }
     // снять предыдущего преподавателя с курса, если он там был.
-    // TODO переделать в МАП?
     if (foundCourse.getTeacher() != null) {
       foundCourse.getTeacher().setCourse(null);
     }
@@ -245,7 +226,7 @@ public class AcademySingleton {
   }
 
   private void studentMenu() {
-    if(getTeachers().size()==0){
+    if (getTeachers().size() == 0) {
       System.out.println("===========================================================");
       System.out.println("Список студентов пуст. Добавьте студента в меню администратора");
       System.out.println("===========================================================");
@@ -268,6 +249,7 @@ public class AcademySingleton {
         System.out.println("===========================================================");
         System.out.println("Введён некорректный Id, повторите");
         System.out.println("===========================================================");
+        Logger.writeLogToFile(ex);
       }
     }
     while (true) {
@@ -355,9 +337,10 @@ public class AcademySingleton {
     Object object;
 
     while (true) {
-      if(getTeachers().size()==0){
+      if (getTeachers().size() == 0) {
         System.out.println("===========================================================");
-        System.out.println("Список преподавателей пуст. Добавьте преподавателя в меню администратора");
+        System.out.println(
+            "Список преподавателей пуст. Добавьте преподавателя в меню администратора");
         System.out.println("===========================================================");
         return;
       }
@@ -373,6 +356,7 @@ public class AcademySingleton {
         System.out.println("===========================================================");
         System.out.println("Введён некорректный Id, повторите");
         System.out.println("===========================================================");
+        Logger.writeLogToFile(ex);
       }
     }
 
