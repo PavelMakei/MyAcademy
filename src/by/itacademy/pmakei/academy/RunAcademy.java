@@ -7,6 +7,8 @@ import by.itacademy.pmakei.academy.utils.AcademyUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+//TODO дописать в меню сортировку
+//TODO добть энамы в оценки
 
 /** @author Pavel Makei */
 public final class RunAcademy {

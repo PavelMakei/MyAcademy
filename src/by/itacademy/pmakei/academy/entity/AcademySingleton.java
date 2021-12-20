@@ -9,11 +9,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-// TODO вынести обработку исключений по неверному ID  отдельный метод?
 
 public class AcademySingleton {
 
-  // realize singleton:
   private static AcademySingleton academySingleton; // create PRIVATE STATIC reference
   public static StringBuilder saveFolder;
   private List<Student> students;
@@ -37,7 +35,7 @@ public class AcademySingleton {
     teachers = new ArrayList<>();
     students = new ArrayList<>();
 
-    // Папка для сохранения
+    // Папка для сохранения/восстановления архива (БД)
     saveFolder = new StringBuilder();
     saveFolder
         .append("src")
