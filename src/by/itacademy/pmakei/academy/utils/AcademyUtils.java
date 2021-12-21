@@ -16,15 +16,16 @@ public final class AcademyUtils {
 
   private AcademyUtils() {}
 
-  public static List sortHumanByName(List humans) {
+  public static List sortHuman(List humans, Comparator comparator) {
 
-    Collections.sort(humans);
+    Collections.sort(humans,comparator);
     return humans;
   }
 
   public static void printAllTeachers(List teachers) {
     Collections.sort(teachers, new ComparatorHumanByName());
     //        Collections.sort(teachers,new CompareHumanBySurname());
+    sortMenu(teachers, "преподавателей");
 
     for (Object t : teachers) {
       Teacher teacher = (Teacher) t;
@@ -48,15 +49,59 @@ public final class AcademyUtils {
     }
   }
 
+  private static void sortMenu(List humans, String role) {
+    System.out.println("===========================================================");
+    System.out.println("Отсортировать список  " + role);
+    System.out.println("===========================================================");
+
+    while (true) {
+      System.out.println("===========================================================");
+      System.out.println("Отсортировать по:");
+      System.out.println("1. Id");
+      System.out.println("2. Имени");
+      System.out.println("3. Фамилии");
+      System.out.println("===========================================================");
+
+      switch (getIntFromConsole()) {
+        case 1:
+          System.out.println("===========================================================");
+          System.out.println("Отсортированы по Id");
+          System.out.println("===========================================================");
+          AcademyUtils.sortHuman(humans, new ComparatorHumanById());
+          return;
+        case 2:
+          System.out.println("===========================================================");
+          System.out.println("Отсортированы по имени");
+          System.out.println("===========================================================");
+          AcademyUtils.sortHuman(humans, new ComparatorHumanByName());
+          return;
+        case 3:
+          System.out.println("===========================================================");
+          System.out.println("Отсортированы по фамилии");
+          System.out.println("===========================================================");
+          AcademyUtils.sortHuman(humans, new ComparatorHumanBySurname());
+          return;
+
+        default:
+          System.out.println("===========================================================");
+          System.out.println("Введены некорректные ");
+          System.out.println("===========================================================");
+          AcademyUtils.sortHuman(humans, new ComparatorHumanBySurname());
+          break;
+
+      }
+}
+  }
+
   public static void printAllStudents(List students) {
     if (students == null) {
       System.out.println("Нет зарегистрированных студентов");
       return;
     }
-    Comparator<Student> comparatorByName = Comparator.comparing(obj -> obj.getName());
-    Collections.sort(students, comparatorByName);
-    //        Comparator<Student> comparatorBySurname = Comparator.comparing(obj->obj.getSurname());
-    //        Collections.sort(students, comparatorBySurname);
+    sortMenu(students, "студентов");
+    //Comparator<Student> comparatorByName = Comparator.comparing(obj -> obj.getName());
+    //Comparator<Student> comparatorBySurname = Comparator.comparing(obj->obj.getSurname());
+    //Collections.sort(students, comparatorBySurname);
 
     for (Object s : students) {
       Student student = (Student) s;
@@ -208,7 +253,7 @@ public final class AcademyUtils {
       System.out.println("===========================================================");
       try {
         human = academySingleton.getHumanById(studentOnCourse, AcademyUtils.getIntFromConsole());
-      } catch (IncorrectHumanIdException ex) { // TODO дописать логирование?
+      } catch (IncorrectHumanIdException ex) {
         System.out.println("===========================================================");
         System.out.println("Введён некорректный Id, выход");
         System.out.println("===========================================================");

@@ -120,7 +120,7 @@ public class AcademySingleton {
         human = getHumanById(getTeachers(), AcademyUtils.getIntFromConsole());
         foundTeacher = (Teacher) human;
         break;
-      } catch (IncorrectHumanIdException ex) { // TODO добавить данные в логирование?
+      } catch (IncorrectHumanIdException ex) {
         System.out.println("===========================================================");
         System.out.println("Введены некорректные данные, повторите");
         System.out.println("===========================================================");
@@ -160,7 +160,7 @@ public class AcademySingleton {
   public void addStudent(String name, String surname, int age) {
     students.add(new Student(Human.getHumanId(), name, surname, age));
   }
-  // TODO добавить принт списка курсов?
+
   public void addCourse(String courseName) {
     if (academySingleton.getCourses().size() != 0) {
       for (Course course : academySingleton.getCourses()) {
@@ -242,7 +242,7 @@ public class AcademySingleton {
         object = getHumanById(getStudents(), AcademyUtils.getIntFromConsole());
         student = (Student) object;
         break;
-      } catch (IncorrectHumanIdException ex) { // TODO добавить логирование?
+      } catch (IncorrectHumanIdException ex) {
 
         System.out.println("===========================================================");
         System.out.println("Введён некорректный Id, повторите");
@@ -350,7 +350,7 @@ public class AcademySingleton {
         object = getHumanById(getTeachers(), AcademyUtils.getIntFromConsole());
         teacher = (Teacher) object;
         break;
-      } catch (IncorrectHumanIdException ex) { // TODO добавить логирование?
+      } catch (IncorrectHumanIdException ex) {
         System.out.println("===========================================================");
         System.out.println("Введён некорректный Id, повторите");
         System.out.println("===========================================================");
@@ -453,9 +453,6 @@ public class AcademySingleton {
           System.out.println("===========================================================");
           mapTeacherToCourse();
           break;
-
-          // TODO добавить остальные пункты
-
         case 8:
           System.out.println("===========================================================");
           System.out.println("Выход");
