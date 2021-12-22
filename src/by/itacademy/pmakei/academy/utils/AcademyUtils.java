@@ -18,35 +18,34 @@ public final class AcademyUtils {
 
   public static List sortHuman(List humans, Comparator comparator) {
 
-    Collections.sort(humans,comparator);
+    Collections.sort(humans, comparator);
     return humans;
   }
 
-  public static void printAllTeachers(List teachers) {
+  public static void printAllTeachers(List<Teacher> teachers) {
     Collections.sort(teachers, new ComparatorHumanByName());
     //        Collections.sort(teachers,new CompareHumanBySurname());
     sortMenu(teachers, "преподавателей");
 
-    for (Object t : teachers) {
-      Teacher teacher = (Teacher) t;
+    teachers.forEach(teacher -> {
       System.out.println(
-          "Id- "
-              + teacher.getPersonalId()
-              + "; "
-//              + "имя и фамилия - "
-              + teacher.getName()
-              + " "
-              + teacher.getSurname()
-              + "; "
-              + "возраст- "
-              + teacher.getAge()
-              + "; ");
+              "Id- "
+                      + teacher.getPersonalId()
+                      + "; "
+                      //              + "имя и фамилия - "
+                      + teacher.getName()
+                      + " "
+                      + teacher.getSurname()
+                      + "; "
+                      + "возраст- "
+                      + teacher.getAge()
+                      + "; ");
       System.out.println(
-          "курс- "
-              + (teacher.getCourse() == null
-                  ? "не назначен на курс \n"
-                  : teacher.getCourse().getCourseName() + ".\n"));
-    }
+              "курс- "
+                      + (teacher.getCourse() == null
+                      ? "не назначен на курс \n"
+                      : teacher.getCourse().getCourseName() + ".\n"));
+    });
   }
 
   private static void sortMenu(List humans, String role) {
@@ -88,45 +87,44 @@ public final class AcademyUtils {
           System.out.println("===========================================================");
           AcademyUtils.sortHuman(humans, new ComparatorHumanBySurname());
           break;
-
       }
-}
+    }
   }
 
-  public static void printAllStudents(List students) {
+  public static void printAllStudents(List<Student> students) {
     if (students == null) {
       System.out.println("Нет зарегистрированных студентов");
       return;
     }
     sortMenu(students, "студентов");
-    //Comparator<Student> comparatorByName = Comparator.comparing(obj -> obj.getName());
-    //Comparator<Student> comparatorBySurname = Comparator.comparing(obj->obj.getSurname());
-    //Collections.sort(students, comparatorBySurname);
+    // Comparator<Student> comparatorByName = Comparator.comparing(obj -> obj.getName());
+    // Comparator<Student> comparatorBySurname = Comparator.comparing(obj->obj.getSurname());
+    // Collections.sort(students, comparatorBySurname);
 
-    for (Object s : students) {
-      Student student = (Student) s;
-      System.out.println(
-          "Id- "
-              + student.getPersonalId()
-              + "; "
-//              + "имя и фамилия - "
-              + student.getName()
-              + " "
-              + student.getSurname()
-              + "; "
-              + "возраст- "
-              + student.getAge()
-              + "; ");
-      if (student.getCourses().size() == 0) {
-        System.out.println("Не записался на курсы");
-      } else {
-        System.out.println("Записался на курсы:");
-        for (Course course : student.getCourses()) {
-          System.out.println(course.getCourseName() + ";");
-        }
-      }
-      System.out.println();
-    }
+    students.forEach(
+        (student) -> {
+          System.out.println(
+              "Id- "
+                  + student.getPersonalId()
+                  + "; "
+                  + student.getName()
+                  + " "
+                  + student.getSurname()
+                  + "; "
+                  + "возраст- "
+                  + student.getAge()
+                  + "; ");
+
+          if (student.getCourses().size() == 0) {
+            System.out.println("Не записался на курсы");
+          } else {
+            System.out.println("Записался на курсы:");
+            for (Course course : student.getCourses()) {
+              System.out.println(course.getCourseName() + ";");
+            }
+          }
+          System.out.println();
+        });
   }
 
   public static int getIntFromConsole() {
@@ -169,39 +167,34 @@ public final class AcademyUtils {
       System.out.println("пока нет оценок.");
       return;
     }
-    for (Object object : marks) {
-      mark = (Mark) object;
-      System.out.println(mark);
-    }
+    marks.forEach(System.out::println);
   }
 
   public static void printAllStudentsOnCourse(Course course) {
-    Student student;
     if (course == null) {
       System.out.println("Преподаватель не ведёт курсов");
       return;
     }
-    List studentsOnCourse = getListStudentsOnCourse(course);
+    List<Student> studentsOnCourse = getListStudentsOnCourse(course);
     if (studentsOnCourse.size() == 0) {
       System.out.println("Студентов  на курсе не зарегистрировано");
       return;
     }
-    for (Object studentObject : studentsOnCourse) {
-      student = (Student) studentObject;
+    studentsOnCourse.forEach(student -> {
       System.out.println(
-          "Id "
-              + student.getPersonalId()
-              + ", имя и фамилия: "
-              + student.getName()
-              + " "
-              + student.getSurname()
-              + ";");
-    }
+              "Id "
+                      + student.getPersonalId()
+                      + ", имя и фамилия: "
+                      + student.getName()
+                      + " "
+                      + student.getSurname()
+                      + ";");
+    });
   }
 
   private static List getListStudentsOnCourse(Course course) {
-    List studentsOnCourse = new ArrayList();
-    List allStudents = academySingleton.getStudents();
+    List <Student> studentsOnCourse = new ArrayList();
+    List <Student> allStudents = academySingleton.getStudents();
     for (Student student : academySingleton.getStudents()) {
       if (student.getCourses().size() == 0) {
         continue;
@@ -367,8 +360,10 @@ public final class AcademyUtils {
       academySingleton.setTeachers(new ArrayList());
       academySingleton.setStudents(new ArrayList());
       Human.setHumanIdCount(1);
-      Logger.writeLogToFile("Файл не найден "+ new File(String.valueOf(academySingleton.saveFolder) + "save.ser")
-              .getAbsolutePath());
+      Logger.writeLogToFile(
+          "Файл не найден "
+              + new File(String.valueOf(academySingleton.saveFolder) + "save.ser")
+                  .getAbsolutePath());
       return;
 
     } catch (ClassNotFoundException e) {
@@ -384,8 +379,10 @@ public final class AcademyUtils {
       academySingleton.setTeachers(new ArrayList());
       academySingleton.setStudents(new ArrayList());
       Human.setHumanIdCount(1);
-      Logger.writeLogToFile("Класс не найден "+ new File(String.valueOf(academySingleton.saveFolder) + "save.ser")
-              .getAbsolutePath());
+      Logger.writeLogToFile(
+          "Класс не найден "
+              + new File(String.valueOf(academySingleton.saveFolder) + "save.ser")
+                  .getAbsolutePath());
       return;
     } catch (IOException e) {
       System.out.println("===========================================================");
@@ -400,8 +397,10 @@ public final class AcademyUtils {
       academySingleton.setTeachers(new ArrayList());
       academySingleton.setStudents(new ArrayList());
       Human.setHumanIdCount(1);
-      Logger.writeLogToFile("Ошибка чтения файла "+ new File(String.valueOf(academySingleton.saveFolder) + "save.ser")
-              .getAbsolutePath());
+      Logger.writeLogToFile(
+          "Ошибка чтения файла "
+              + new File(String.valueOf(academySingleton.saveFolder) + "save.ser")
+                  .getAbsolutePath());
       return;
     }
   }
