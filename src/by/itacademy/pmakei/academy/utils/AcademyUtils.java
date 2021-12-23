@@ -49,9 +49,7 @@ public final class AcademyUtils {
   }
 
   private static void sortMenu(List humans, String role) {
-    System.out.println("===========================================================");
-    System.out.println("Отсортировать список  " + role);
-    System.out.println("===========================================================");
+    printPartOfMenu("Отсортировать список  " + role);
 
     while (true) {
       System.out.println("===========================================================");
@@ -63,32 +61,29 @@ public final class AcademyUtils {
 
       switch (getIntFromConsole()) {
         case 1:
-          System.out.println("===========================================================");
-          System.out.println("Отсортированы по Id");
-          System.out.println("===========================================================");
+          printPartOfMenu("Отсортированы по Id");
           AcademyUtils.sortHuman(humans, new ComparatorHumanById());
           return;
         case 2:
-          System.out.println("===========================================================");
-          System.out.println("Отсортированы по имени");
-          System.out.println("===========================================================");
+          printPartOfMenu("Отсортированы по имени");
           AcademyUtils.sortHuman(humans, new ComparatorHumanByName());
           return;
         case 3:
-          System.out.println("===========================================================");
-          System.out.println("Отсортированы по фамилии");
-          System.out.println("===========================================================");
+          printPartOfMenu("Отсортированы по фамилии");
           AcademyUtils.sortHuman(humans, new ComparatorHumanBySurname());
           return;
-
         default:
-          System.out.println("===========================================================");
-          System.out.println("Введены некорректные ");
-          System.out.println("===========================================================");
+          printPartOfMenu("Некорректный ввод, повторите");
           AcademyUtils.sortHuman(humans, new ComparatorHumanBySurname());
           break;
       }
     }
+  }
+
+  public static void printPartOfMenu(String string) {
+    System.out.println("===========================================================");
+    System.out.println("\"" + string + "\"");
+    System.out.println("===========================================================");
   }
 
   public static void printAllStudents(List<Student> students) {
@@ -233,23 +228,16 @@ public final class AcademyUtils {
     }
     studentOnCourse = getListStudentsOnCourse(teacher.getCourse());
     if (studentOnCourse.size() == 0) {
-      System.out.println("===========================================================");
-      System.out.println("Нет студентов, на курсе этого преподавателя");
-      System.out.println("===========================================================");
+      printPartOfMenu("Нет студентов, на курсе этого преподавателя");
       return;
     }
     while (true) {
       AcademyUtils.printAllStudents(academySingleton.getStudents());
-
-      System.out.println("===========================================================");
-      System.out.println("Введите Id студента");
-      System.out.println("===========================================================");
+      printPartOfMenu("Введите Id студента");
       try {
         human = academySingleton.getHumanById(studentOnCourse, AcademyUtils.getIntFromConsole());
       } catch (IncorrectHumanIdException ex) {
-        System.out.println("===========================================================");
-        System.out.println("Введён некорректный Id, выход");
-        System.out.println("===========================================================");
+        printPartOfMenu("Введён некорректный Id, выход");
         return;
       }
 
@@ -274,26 +262,18 @@ public final class AcademyUtils {
       }
     }
     while (true) {
-      System.out.println("===========================================================");
-      System.out.println("Ввеите оценку студенту от 1 до 5");
-      System.out.println("===========================================================");
+      printPartOfMenu("Ввеите оценку студенту от 1 до 5");
       markValue = AcademyUtils.getIntFromConsole();
       if (markValue < 1 || markValue > 5) {
-        System.out.println("===========================================================");
-        System.out.println("Введено некорректное значение, повторите");
-        System.out.println("===========================================================");
+        printPartOfMenu("Введено некорректное значение, повторите");
       } else {
         break;
       }
     }
-    System.out.println("===========================================================");
-    System.out.println("Введите отзыв о студенте");
-    System.out.println("===========================================================");
+    printPartOfMenu("Введите отзыв о студенте");
     feedback = getStringFromConsole();
     student.setMark(new Mark(teacher, teachersCourse, markValue, feedback));
-    System.out.println("===========================================================");
-    System.out.println("Оценка успешно добавлена");
-    System.out.println("===========================================================");
+    printPartOfMenu("Оценка успешно добавлена");
   }
 
   public static void saveArchiveDataTofile(Archive archive, String file) throws IOException {
@@ -343,9 +323,7 @@ public final class AcademyUtils {
       academySingleton.setTeachers(archive.getTeachers());
       academySingleton.setStudents(archive.getStudents());
       Human.setHumanIdCount(archive.getHumanIdCount());
-      System.out.println("===========================================================");
-      System.out.println("Архив успешно загружен");
-      System.out.println("===========================================================");
+      printPartOfMenu("Архив успешно загружен");
       return;
     } catch (FileNotFoundException e) {
       System.out.println("===========================================================");

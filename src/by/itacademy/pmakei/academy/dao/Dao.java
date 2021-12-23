@@ -1,6 +1,4 @@
-package by.itacademy.pmakei.academy.interfaces;
-
-import by.itacademy.pmakei.academy.entity.Human;
+package by.itacademy.pmakei.academy.dao;
 
 public interface Dao <T>{
     //create

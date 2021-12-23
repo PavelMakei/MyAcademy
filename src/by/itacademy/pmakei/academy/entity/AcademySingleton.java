@@ -52,7 +52,7 @@ public class AcademySingleton {
         .append(File.separator)
         .append("save")
         .append(File.separator);
-      }
+  }
 
   public List<Student> getStudents() {
     // List list = new ArrayList(students);
@@ -190,34 +190,24 @@ public class AcademySingleton {
 
       switch (AcademyUtils.getIntFromConsole()) {
         case 1:
-          System.out.println("===========================================================");
-          System.out.println("Вы вошли как администратор");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Вы вошли как администратор");
           adminMenu();
           break;
         case 2:
-          System.out.println("===========================================================");
-          System.out.println("Вы вошли как преподаватель");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Вы вошли как преподаватель");
           teacherMenu();
           break;
         case 3:
-          System.out.println("===========================================================");
-          System.out.println("Вы вошли как студент");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Вы вошли как студент");
           studentMenu();
           break;
         case 4:
-          System.out.println("===========================================================");
-          System.out.println("Выход");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Выход");
           AcademyUtils.saveArchive();
           System.exit(0);
           break;
         default:
-          System.out.println("===========================================================");
-          System.out.println("Некорректный ввод, повторите");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Некорректный ввод, повторите");
           break;
       }
     }
@@ -225,9 +215,8 @@ public class AcademySingleton {
 
   private void studentMenu() {
     if (getTeachers().size() == 0) {
-      System.out.println("===========================================================");
-      System.out.println("Список студентов пуст. Добавьте студента в меню администратора");
-      System.out.println("===========================================================");
+      AcademyUtils.printPartOfMenu(
+          "Список студентов пуст. Добавьте студента в меню администратора");
       return;
     }
     System.out.println("Выберите студента");
@@ -235,18 +224,13 @@ public class AcademySingleton {
     Object object;
     while (true) {
       AcademyUtils.printAllStudents(getStudents());
-      System.out.println("===========================================================");
-      System.out.println("Введите Id студента");
-      System.out.println("===========================================================");
+      AcademyUtils.printPartOfMenu("Введите Id студента");
       try {
         object = getHumanById(getStudents(), AcademyUtils.getIntFromConsole());
         student = (Student) object;
         break;
       } catch (IncorrectHumanIdException ex) {
-
-        System.out.println("===========================================================");
-        System.out.println("Введён некорректный Id, повторите");
-        System.out.println("===========================================================");
+        AcademyUtils.printPartOfMenu("Введён некорректный Id, повторите");
         Logger.writeLogToFile(ex);
       }
     }
@@ -260,29 +244,18 @@ public class AcademySingleton {
 
       switch (AcademyUtils.getIntFromConsole()) {
         case 1:
-          System.out.println("===========================================================");
-          System.out.println("Записаться на курс");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Записаться на курс");
           addStudentToCourse(student);
           break;
-
         case 2:
-          System.out.println("===========================================================");
-          System.out.println("Просмотреть оценки");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Просмотреть оценки");
           AcademyUtils.printAllMarks(student.getMarks());
           break;
-
         case 3:
-          System.out.println("===========================================================");
-          System.out.println("Выход");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Выход");
           return;
-
         default:
-          System.out.println("===========================================================");
-          System.out.println("Некорректный ввод, повторите");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Некорректный ввод, повторите");
           break;
       }
     }
@@ -291,17 +264,11 @@ public class AcademySingleton {
   private void addStudentToCourse(Student student) { // TODO optimize
     Course course;
     while (true) {
-
       AcademyUtils.printAllCourses();
-      System.out.println("===========================================================");
-      System.out.println("Введите название курса");
-      System.out.println("===========================================================");
+      AcademyUtils.printPartOfMenu("Введите название курса");
       course = getCourseByCourseName(AcademyUtils.getStringFromConsole());
-
       if (course == null) {
-        System.out.println("===========================================================");
-        System.out.println("Введены некорректные данные, повторите");
-        System.out.println("===========================================================");
+        AcademyUtils.printPartOfMenu("Введены некорректные данные, повторите");
         continue;
       }
       boolean isStudentRegistred = false;
@@ -310,9 +277,7 @@ public class AcademySingleton {
 
         for (Course tempCourse : student.getCourses()) {
           if (tempCourse.equals(course)) {
-            System.out.println("===========================================================");
-            System.out.println("Студент уже был записан на данный курс");
-            System.out.println("===========================================================");
+            AcademyUtils.printPartOfMenu("Студент уже был записан на данный курс");
             isStudentRegistred = true;
             return;
           }
@@ -321,9 +286,7 @@ public class AcademySingleton {
 
       if (!isStudentRegistred) {
         student.addCourse(course);
-        System.out.println("===========================================================");
-        System.out.println("Студент успешно записан на данный курс");
-        System.out.println("===========================================================");
+        AcademyUtils.printPartOfMenu("Студент успешно записан на данный курс");
         return;
       }
     }
@@ -336,24 +299,18 @@ public class AcademySingleton {
 
     while (true) {
       if (getTeachers().size() == 0) {
-        System.out.println("===========================================================");
-        System.out.println(
+        AcademyUtils.printPartOfMenu(
             "Список преподавателей пуст. Добавьте преподавателя в меню администратора");
-        System.out.println("===========================================================");
         return;
       }
       AcademyUtils.printAllTeachers(getTeachers());
-      System.out.println("===========================================================");
-      System.out.println("Введите Id преподавателя");
-      System.out.println("===========================================================");
+      AcademyUtils.printPartOfMenu("Введите Id преподавателя");
       try {
         object = getHumanById(getTeachers(), AcademyUtils.getIntFromConsole());
         teacher = (Teacher) object;
         break;
       } catch (IncorrectHumanIdException ex) {
-        System.out.println("===========================================================");
-        System.out.println("Введён некорректный Id, повторите");
-        System.out.println("===========================================================");
+        AcademyUtils.printPartOfMenu("Введён некорректный Id, повторите");
         Logger.writeLogToFile(ex);
       }
     }
@@ -364,33 +321,21 @@ public class AcademySingleton {
       System.out.println("1. Просмотреть список учеников на курсе");
       System.out.println("2. Поставить оценку студенту");
       System.out.println("3. Выход");
-
       System.out.println("===========================================================");
       switch (AcademyUtils.getIntFromConsole()) {
         case 1:
-          System.out.println("===========================================================");
-          System.out.println("Список учеников на курсе");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Список учеников на курсе");
           AcademyUtils.printAllStudentsOnCourse(teacher.getCourse());
           break;
-
         case 2:
-          System.out.println("===========================================================");
-          System.out.println("Поставить оценку студенту");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Поставить оценку студенту");
           AcademyUtils.setMarkToStudent(teacher);
           break;
-
         case 3:
-          System.out.println("===========================================================");
-          System.out.println("Выход");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Выход");
           return;
-
         default:
-          System.out.println("===========================================================");
-          System.out.println("Некорректный ввод, повторите");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Некорректный ввод, повторите");
           break;
       }
     }
@@ -412,57 +357,39 @@ public class AcademySingleton {
 
       switch (AcademyUtils.getIntFromConsole()) {
         case 1:
-          System.out.println("===========================================================");
-          System.out.println("Список преподавателей:");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Список преподавателей:");
           AcademyUtils.printAllTeachers(teachers);
           break;
         case 2:
-          System.out.println("===========================================================");
-          System.out.println("Список студентов:");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Список студентов:");
           AcademyUtils.printAllStudents(students);
           break;
         case 3:
-          System.out.println("===========================================================");
-          System.out.println("Список курсов:");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Список курсов:");
           AcademyUtils.printAllCourses();
           break;
         case 4:
-          System.out.println("===========================================================");
-          System.out.println("Добавить преподавателя");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Добавить преподавателя");
           createNewTeacher();
           break;
         case 5:
-          System.out.println("===========================================================");
-          System.out.println("Добавить студента");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Добавить студента");
           createNewStudent();
           break;
         case 6:
-          System.out.println("===========================================================");
-          System.out.println("Добавить курс");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Добавить курс");
           createNewCourse();
           break;
         case 7:
-          System.out.println("===========================================================");
-          System.out.println("Назначить преподавателя на курс");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Назначить преподавателя на курс");
           mapTeacherToCourse();
           break;
         case 8:
-          System.out.println("===========================================================");
-          System.out.println("Выход");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Выход");
           return;
 
         default:
-          System.out.println("===========================================================");
-          System.out.println("Некорректный ввод, повторите");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Некорректный ввод, повторите");
           break;
       }
     }
@@ -478,9 +405,7 @@ public class AcademySingleton {
         getStringFromUser("фамилию", "студента"),
         getAgeFromUser());
 
-    System.out.println("===========================================================");
-    System.out.println("Студент успешно добавлен");
-    System.out.println("===========================================================");
+    AcademyUtils.printPartOfMenu("Студент успешно добавлен");
   }
 
   private void createNewTeacher() {
@@ -489,23 +414,17 @@ public class AcademySingleton {
         getStringFromUser("фамилию", "преподавателя"),
         getAgeFromUser());
 
-    System.out.println("===========================================================");
-    System.out.println("Преподаватель успешно добавлен");
-    System.out.println("===========================================================");
+    AcademyUtils.printPartOfMenu("Преподаватель успешно добавлен");
   }
 
   private int getAgeFromUser() {
     int age;
     while (true) {
-      System.out.println("===========================================================");
-      System.out.println("Введите возраст");
-      System.out.println("===========================================================");
+      AcademyUtils.printPartOfMenu("Введите возраст");
       age = AcademyUtils.getIntFromConsole();
 
       if (age < 18 || age > 100) {
-        System.out.println("===========================================================");
-        System.out.println("Введите возрвст (целое число от 18 до 100)");
-        System.out.println("===========================================================");
+        AcademyUtils.printPartOfMenu("Введите возрвст (целое число от 18 до 100)");
       } else {
         return age;
       }
@@ -513,9 +432,7 @@ public class AcademySingleton {
   }
 
   private String getStringFromUser(String string1, String string2) {
-    System.out.println("===========================================================");
-    System.out.println("Введите " + string1 + " " + string2);
-    System.out.println("===========================================================");
+    AcademyUtils.printPartOfMenu("Введите " + string1 + " " + string2);
     return AcademyUtils.getStringFromConsole();
   }
 

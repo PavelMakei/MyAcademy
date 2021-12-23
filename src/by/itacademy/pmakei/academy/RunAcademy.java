@@ -1,12 +1,7 @@
 package by.itacademy.pmakei.academy;
 
 import by.itacademy.pmakei.academy.entity.AcademySingleton;
-import by.itacademy.pmakei.academy.entity.Student;
-import by.itacademy.pmakei.academy.exceptions.IncorrectHumanIdException;
 import by.itacademy.pmakei.academy.utils.AcademyUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 //TODO дописать в меню сортировку
 
 /** @author Pavel Makei */
