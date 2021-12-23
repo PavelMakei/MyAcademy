@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class AcademySingleton {
 
@@ -95,15 +96,11 @@ public class AcademySingleton {
 
   public void mapTeacherToCourse() {
     if (academySingleton.getTeachers().size() == 0) {
-      System.out.println("===========================================================");
-      System.out.println("Список преподавателей пуст");
-      System.out.println("===========================================================");
+      AcademyUtils.printPartOfMenu("Список преподавателей пуст");
       return;
     }
     if (academySingleton.getCourses().size() == 0) {
-      System.out.println("===========================================================");
-      System.out.println("Список курсов пуст");
-      System.out.println("===========================================================");
+      AcademyUtils.printPartOfMenu("Список курсов пуст");
       return;
     }
 
@@ -113,30 +110,22 @@ public class AcademySingleton {
     Course course = null;
     while (true) {
       AcademyUtils.printAllTeachers(getTeachers());
-      System.out.println("===========================================================");
-      System.out.println("Введите Id преподавателя");
-      System.out.println("===========================================================");
+      AcademyUtils.printPartOfMenu("Введите Id преподавателя");
       try {
         human = getHumanById(getTeachers(), AcademyUtils.getIntFromConsole());
         foundTeacher = (Teacher) human;
         break;
       } catch (IncorrectHumanIdException ex) {
-        System.out.println("===========================================================");
-        System.out.println("Введены некорректные данные, повторите");
-        System.out.println("===========================================================");
+        AcademyUtils.printPartOfMenu("Введены некорректные данные, повторите");
         Logger.writeLogToFile(ex);
       }
     }
     while (true) {
       AcademyUtils.printAllCourses();
-      System.out.println("===========================================================");
-      System.out.println("Введите название курса");
-      System.out.println("===========================================================");
+      AcademyUtils.printPartOfMenu("Введите название курса");
       course = getCourseByCourseName(AcademyUtils.getStringFromConsole());
       if (course == null) {
-        System.out.println("===========================================================");
-        System.out.println("Введены некорректные данные, повторите");
-        System.out.println("===========================================================");
+        AcademyUtils.printPartOfMenu("Введены некорректные данные, повторите");
       } else {
         foundCourse = (Course) course;
         break;
@@ -148,9 +137,7 @@ public class AcademySingleton {
     }
     foundTeacher.setCourse(foundCourse);
     foundCourse.setTeacher(foundTeacher);
-    System.out.println("===========================================================");
-    System.out.println("Преподаватель назначен на курс");
-    System.out.println("===========================================================");
+    AcademyUtils.printPartOfMenu("Преподаватель назначен на курс");
   }
 
   public void addTeacher(String name, String surname, int age) {
@@ -165,17 +152,13 @@ public class AcademySingleton {
     if (academySingleton.getCourses().size() != 0) {
       for (Course course : academySingleton.getCourses()) {
         if (course.getCourseName().equals(courseName)) {
-          System.out.println("===========================================================");
-          System.out.println("Данный курс уже существует");
-          System.out.println("===========================================================");
+          AcademyUtils.printPartOfMenu("Данный курс уже существует");
           return;
         }
       }
     }
     courses.add(new Course(courseName));
-    System.out.println("===========================================================");
-    System.out.println("Курс успешно добавлен");
-    System.out.println("===========================================================");
+    AcademyUtils.printPartOfMenu("Курс успешно добавлен");
   }
 
   public void mainMenu() {
@@ -401,19 +384,17 @@ public class AcademySingleton {
 
   private void createNewStudent() {
     addStudent(
-        getStringFromUser("имя", "студента"),
-        getStringFromUser("фамилию", "студента"),
+        valideteNameSurname("имя", "студента"),
+        valideteNameSurname("фамилию", "студента"),
         getAgeFromUser());
-
     AcademyUtils.printPartOfMenu("Студент успешно добавлен");
   }
 
   private void createNewTeacher() {
     addTeacher(
-        getStringFromUser("имя", "преподавателя"),
-        getStringFromUser("фамилию", "преподавателя"),
+        valideteNameSurname("имя", "преподавателя"),
+        valideteNameSurname("фамилию", "преподавателя"),
         getAgeFromUser());
-
     AcademyUtils.printPartOfMenu("Преподаватель успешно добавлен");
   }
 
@@ -427,6 +408,19 @@ public class AcademySingleton {
         AcademyUtils.printPartOfMenu("Введите возрвст (целое число от 18 до 100)");
       } else {
         return age;
+      }
+    }
+  }
+
+  private String valideteNameSurname(String nameOrSurname, String role) {
+    String stringFromUser;
+    while (true) {
+      stringFromUser = getStringFromUser(nameOrSurname, role);
+      if (Pattern.matches("^(?=.{3})[A-ZА-Я][a-zа-яё]+-?[a-zа-яё]*$", stringFromUser)) {
+        return stringFromUser;
+      } else {
+        System.out.println(
+            "Введите слово с Заглавной буквы, допускаются буквы латинского и русского алфавита,\nа также один дефис");
       }
     }
   }
