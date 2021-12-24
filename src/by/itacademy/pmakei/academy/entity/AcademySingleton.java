@@ -1,5 +1,7 @@
 package by.itacademy.pmakei.academy.entity;
 
+
+
 import by.itacademy.pmakei.academy.exceptions.IncorrectHumanIdException;
 import by.itacademy.pmakei.academy.utils.AcademyUtils;
 import by.itacademy.pmakei.academy.utils.Logger;
