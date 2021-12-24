@@ -384,16 +384,16 @@ public class AcademySingleton {
 
   private void createNewStudent() {
     addStudent(
-        valideteNameSurname("имя", "студента"),
-        valideteNameSurname("фамилию", "студента"),
+        validateNameSurname("имя", "студента"),
+        validateNameSurname("фамилию", "студента"),
         getAgeFromUser());
     AcademyUtils.printPartOfMenu("Студент успешно добавлен");
   }
 
   private void createNewTeacher() {
     addTeacher(
-        valideteNameSurname("имя", "преподавателя"),
-        valideteNameSurname("фамилию", "преподавателя"),
+        validateNameSurname("имя", "преподавателя"),
+        validateNameSurname("фамилию", "преподавателя"),
         getAgeFromUser());
     AcademyUtils.printPartOfMenu("Преподаватель успешно добавлен");
   }
@@ -412,7 +412,7 @@ public class AcademySingleton {
     }
   }
 
-  private String valideteNameSurname(String nameOrSurname, String role) {
+  private String validateNameSurname(String nameOrSurname, String role) {
     String stringFromUser;
     while (true) {
       stringFromUser = getStringFromUser(nameOrSurname, role);

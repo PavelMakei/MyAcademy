@@ -5,6 +5,7 @@ import by.itacademy.pmakei.academy.exceptions.IncorrectHumanIdException;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public final class AcademyUtils {
 
@@ -16,7 +17,7 @@ public final class AcademyUtils {
 
   private AcademyUtils() {}
 
-  public static List sortHuman(List humans, Comparator comparator) {
+  public static List sortHumans(List humans, Comparator comparator) {
 
     Collections.sort(humans, comparator);
     return humans;
@@ -62,19 +63,19 @@ public final class AcademyUtils {
       switch (getIntFromConsole()) {
         case 1:
           printPartOfMenu("Отсортированы по Id");
-          AcademyUtils.sortHuman(humans, new ComparatorHumanById());
+          AcademyUtils.sortHumans(humans, new ComparatorHumanById());
           return;
         case 2:
           printPartOfMenu("Отсортированы по имени");
-          AcademyUtils.sortHuman(humans, new ComparatorHumanByName());
+          AcademyUtils.sortHumans(humans, new ComparatorHumanByName());
           return;
         case 3:
           printPartOfMenu("Отсортированы по фамилии");
-          AcademyUtils.sortHuman(humans, new ComparatorHumanBySurname());
+          AcademyUtils.sortHumans(humans, new ComparatorHumanBySurname());
           return;
         default:
           printPartOfMenu("Некорректный ввод, повторите");
-          AcademyUtils.sortHuman(humans, new ComparatorHumanBySurname());
+          AcademyUtils.sortHumans(humans, new ComparatorHumanBySurname());
           break;
       }
     }
@@ -188,19 +189,29 @@ public final class AcademyUtils {
   }
 
   private static List getListStudentsOnCourse(Course course) {
-    List <Student> studentsOnCourse = new ArrayList();
-    List <Student> allStudents = academySingleton.getStudents();
-    for (Student student : academySingleton.getStudents()) {
-      if (student.getCourses().size() == 0) {
-        continue;
-      }
-      for (Course courseFromList : student.getCourses()) {
-        if (courseFromList.equals(course)) {
-          studentsOnCourse.add(student);
-        }
-      }
-    }
-    return studentsOnCourse;
+    return academySingleton.getStudents().stream() // берём список студентов
+        .filter(
+            student ->
+                student.getCourses().stream()
+                    .anyMatch(courseVra -> courseVra.equals(course))) // фильтруем, если в подсоединяемом потоке курсов, есть нужный
+        .collect(Collectors.toList());//собираем отфильтрованное в List
+
+/** usual method
+ *
+ */
+//    List <Student> studentsOnCourse = new ArrayList();
+//    List <Student> allStudents = academySingleton.getStudents();
+//    for (Student student : academySingleton.getStudents()) {
+//      if (student.getCourses().size() == 0) {
+//        continue;
+//      }
+//      for (Course courseFromList : student.getCourses()) {
+//        if (courseFromList.equals(course)) {
+//          studentsOnCourse.add(student);
+//        }
+//      }
+//    }
+//    return studentsOnCourse;
   }
 
   public static void setMarkToStudent(Teacher teacher) {
