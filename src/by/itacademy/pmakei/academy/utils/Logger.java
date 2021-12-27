@@ -4,11 +4,18 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-/** @author Pavel Makei */
+/**
+ * Logger
+ *
+ * @author Pavel Makei
+ * @version 1.0
+ */
 public final class Logger {
 
+  /** Static field file the field stores URN of log file */
   private static StringBuilder file = new StringBuilder();
 
+  /** Static file initializer {@link Logger#file} */
   static {
     file.append("src")
         .append(File.separator)
@@ -27,6 +34,11 @@ public final class Logger {
         .append("log.txt");
   }
 
+  /**
+   * Function write log String from {@link AcademyUtils#loadArchive()}
+   *
+   * @param message - string message from try/catch block
+   */
   public static void writeLogToFile(String message) {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     try (PrintWriter printWriter =
@@ -37,7 +49,11 @@ public final class Logger {
       Logger.writeLogToFile(e);
     }
   }
-
+  /**
+   * Function write stack trace and exception
+   *
+   * @param exception - exception
+   */
   public static void writeLogToFile(Throwable exception) {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     final StringWriter errors = new StringWriter();

@@ -56,7 +56,7 @@ public final class AcademyUtils {
       System.out.println("===========================================================");
       System.out.println("Отсортировать по:");
       System.out.println("1. Id");
-      System.out.println("2. Имени");
+      System.out.println("2. Name");
       System.out.println("3. Фамилии");
       System.out.println("===========================================================");
 
@@ -259,12 +259,14 @@ public final class AcademyUtils {
   }
 
   public static void saveArchive() {
-    Archive archive = new Archive();
+    Archive archive;
+    archive =
+        new Archive(
+            academySingleton.getStudents(),
+            academySingleton.getTeachers(),
+            academySingleton.getCourses(),
+            Human.getHumanId());
 
-    archive.setCourses(academySingleton.getCourses());
-    archive.setStudents(academySingleton.getStudents());
-    archive.setTeachers(academySingleton.getTeachers());
-    archive.setHumanIdCount(Human.getHumanId());
     try {
       saveArchiveDataTofile(archive, String.valueOf(academySingleton.saveFolder) + "save.ser");
       System.out.println("===========================================================");
