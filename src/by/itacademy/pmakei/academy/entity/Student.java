@@ -7,7 +7,6 @@ public class Student extends Human {
 
     private List<Course> courses = new ArrayList<>();
     private List<Mark> marks = new ArrayList<>();
-    //TODO обработка/регистрация законченных курсов?
 
     public Student(int humanId, String name, String sureName, int age) {
         super(humanId, name, sureName, age);
@@ -33,6 +32,5 @@ public class Student extends Human {
     public boolean equals(Object o) {
         return super.equals(o);
     }
-
 
 }

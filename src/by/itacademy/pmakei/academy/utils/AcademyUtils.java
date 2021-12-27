@@ -94,9 +94,6 @@ public final class AcademyUtils {
       return;
     }
     sortMenu(students, "студентов");
-    // Comparator<Student> comparatorByName = Comparator.comparing(obj -> obj.getName());
-    // Comparator<Student> comparatorBySurname = Comparator.comparing(obj->obj.getSurname());
-    // Collections.sort(students, comparatorBySurname);
 
     students.forEach(
         (student) -> {
@@ -136,22 +133,22 @@ public final class AcademyUtils {
     return string;
   }
 
-  public static Course getCourseNameFromUser() {
-
-    Course course = null;
-
-    do {
-
-      System.out.println("Введите название курса: \n");
-      System.out.println("Доступные курсы");
-      AcademyUtils.printAllCourses();
-      String courseNameFromUser = getStringFromConsole();
-
-      course = academySingleton.getCourseByCourseName(courseNameFromUser);
-    } while (course == null);
-
-    return course;
-  }
+//  public static Course getCourseNameFromUser() {
+//
+//    Course course = null;
+//
+//    do {
+//
+//      System.out.println("Введите название курса: \n");
+//      System.out.println("Доступные курсы");
+//      AcademyUtils.printAllCourses();
+//      String courseNameFromUser = getStringFromConsole();
+//
+//      course = academySingleton.getCourseByCourseName(courseNameFromUser);
+//    } while (course == null);
+//
+//    return course;
+//  }
 
   public static void printAllCourses() {
 
@@ -159,7 +156,7 @@ public final class AcademyUtils {
   }
 
   public static void printAllMarks(List marks) {
-    Mark mark;
+
     if (marks.size() == 0) {
       System.out.println("пока нет оценок.");
       return;
@@ -169,7 +166,7 @@ public final class AcademyUtils {
 
   public static void printAllStudentsOnCourse(Course course) {
     if (course == null) {
-      System.out.println("Преподаватель не ведёт курсов");
+      System.out.println("У данного преподавателя нет курсов");
       return;
     }
     List<Student> studentsOnCourse = getListStudentsOnCourse(course);
@@ -190,36 +187,14 @@ public final class AcademyUtils {
   }
 
   private static List getListStudentsOnCourse(Course course) {
-    return academySingleton.getStudents().stream() // берём список студентов
+    return academySingleton.getStudents().stream()
         .filter(
             student ->
-                student.getCourses().stream()
-                    .anyMatch(courseVra -> courseVra.equals(course))) // фильтруем, если в подсоединяемом потоке курсов, есть нужный
-        .collect(Collectors.toList());//собираем отфильтрованное в List
-
-/** usual method
- *
- */
-//    List <Student> studentsOnCourse = new ArrayList();
-//    List <Student> allStudents = academySingleton.getStudents();
-//    for (Student student : academySingleton.getStudents()) {
-//      if (student.getCourses().size() == 0) {
-//        continue;
-//      }
-//      for (Course courseFromList : student.getCourses()) {
-//        if (courseFromList.equals(course)) {
-//          studentsOnCourse.add(student);
-//        }
-//      }
-//    }
-//    return studentsOnCourse;
+                student.getCourses().stream().anyMatch(courseVra -> courseVra.equals(course)))
+        .collect(Collectors.toList());
   }
 
   public static void setMarkToStudent(Teacher teacher) {
-    /*
-    1. delete from course after mark settings?
-    2. del student from course after marking?
-     */
 
     Student student;
     Object human;
@@ -290,11 +265,15 @@ public final class AcademyUtils {
 
   public static void saveArchiveDataTofile(Archive archive, String file) throws IOException {
 
-    FileOutputStream fos = new FileOutputStream(file);
-    ObjectOutputStream oos = new ObjectOutputStream(fos);
+    ObjectOutputStream oos = null;
+    try {
+      oos = new ObjectOutputStream(new FileOutputStream(file));
     oos.writeObject(archive);
-    oos.close();
-    fos.close();
+    } finally {
+      if (oos != null) {
+        oos.close();
+      }
+    }
   }
 
   public static void saveArchive() {
@@ -393,17 +372,23 @@ public final class AcademyUtils {
                   .getAbsolutePath());
       return;
     }
+
   }
 
   private static Archive loadArchiveFromFile(String file)
       throws IOException, ClassNotFoundException, FileNotFoundException {
 
     Archive archive = new Archive();
+    ObjectInputStream ois = null;
 
-    FileInputStream fis = new FileInputStream(file);
-    ObjectInputStream ois = new ObjectInputStream(fis);
+    try {
+      ois = new ObjectInputStream(new FileInputStream(file));
     archive = (Archive) ois.readObject();
+      return archive;
+    } finally {
+      if (ois != null) {
     ois.close();
-    return archive;
+      }
+    }
   }
 }

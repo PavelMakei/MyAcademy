@@ -20,31 +20,12 @@ public abstract class Human implements Comparable, Serializable {
         humanIdCount++;
     }
 
-
-
-//    public static void increaseId() {
-//        humanIdCount++;
-//    }
-
     public static int getHumanId() {
         return humanIdCount;
     }
 
     public int getPersonalId() {
         return PERSONAL_ID;
-    }
-
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void sen(String surname) {
-        this.surname = surname;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public String getName() {
@@ -61,9 +42,6 @@ public abstract class Human implements Comparable, Serializable {
 
     public static void setHumanIdCount(int id){
         humanIdCount = id;
-    }
-    public static int getHumanIdCount(){
-        return humanIdCount;
     }
 
 

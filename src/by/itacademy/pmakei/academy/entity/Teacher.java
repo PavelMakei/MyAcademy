@@ -16,11 +16,9 @@ public class Teacher extends Human{
         return course;
     }
 
-
     @Override
     public boolean equals(Object o) {
         return super.equals(o);
     }
-
 
 }

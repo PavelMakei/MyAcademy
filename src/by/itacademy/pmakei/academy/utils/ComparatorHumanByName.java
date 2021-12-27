@@ -1,7 +1,6 @@
 package by.itacademy.pmakei.academy.utils;
 
 import by.itacademy.pmakei.academy.entity.Human;
-
 import java.util.Comparator;
 
 public class ComparatorHumanByName implements Comparator<Human> {

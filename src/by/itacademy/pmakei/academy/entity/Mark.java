@@ -25,22 +25,6 @@ public class Mark implements Comparable, Serializable {
     return course;
   }
 
-  public int getValue() {
-    return value;
-  }
-
-  public String getFeedback() {
-    return feedback;
-  }
-
-  public Teacher getTeacher() {
-    return teacher;
-  }
-
-  public Enum<AllowedMark> getAllowedMarkEnum() {
-    return allowedMarkEnum;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

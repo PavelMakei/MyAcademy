@@ -1,7 +1,5 @@
 package by.itacademy.pmakei.academy.entity;
 
-
-
 import by.itacademy.pmakei.academy.exceptions.IncorrectHumanIdException;
 import by.itacademy.pmakei.academy.utils.AcademyUtils;
 import by.itacademy.pmakei.academy.utils.Logger;
@@ -15,15 +13,13 @@ import java.util.regex.Pattern;
 
 public class AcademySingleton {
 
-  private static AcademySingleton academySingleton; // create PRIVATE STATIC reference
+  private static AcademySingleton academySingleton;
   public static StringBuilder saveFolder;
   private List<Student> students;
   private List<Teacher> teachers;
   private List<Course> courses;
-  private AcademyUtils academyUtils;
 
-  private
-  AcademySingleton() {} // PRIVATE constructor to avoid client applications to use constructor
+  private AcademySingleton() {}
 
   public static AcademySingleton getInstance() {
     if (academySingleton == null) {
@@ -58,12 +54,10 @@ public class AcademySingleton {
   }
 
   public List<Student> getStudents() {
-    // List list = new ArrayList(students);
     return this.students;
   }
 
   public List<Teacher> getTeachers() {
-    // List list = new ArrayList(teachers);
     return this.teachers;
   }
 
@@ -246,7 +240,7 @@ public class AcademySingleton {
     }
   }
 
-  private void addStudentToCourse(Student student) { // TODO optimize
+  private void addStudentToCourse(Student student) {
     Course course;
     while (true) {
       AcademyUtils.printAllCourses();
@@ -256,8 +250,8 @@ public class AcademySingleton {
         AcademyUtils.printPartOfMenu("Введены некорректные данные, повторите");
         continue;
       }
+
       boolean isStudentRegistred = false;
-      // проверить наличие
       if (student.getCourses().size() != 0) { // если список курсов студента не равен 0
 
         for (Course tempCourse : student.getCourses()) {
