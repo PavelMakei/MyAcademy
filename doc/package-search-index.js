@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"by.itacademy.pmakei.academy"},{"l":"by.itacademy.pmakei.academy.dao"},{"l":"by.itacademy.pmakei.academy.entity"},{"l":"by.itacademy.pmakei.academy.enums"},{"l":"by.itacademy.pmakei.academy.exceptions"},{"l":"by.itacademy.pmakei.academy.utils"}]
