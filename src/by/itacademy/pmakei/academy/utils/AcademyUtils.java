@@ -1,5 +1,4 @@
 package by.itacademy.pmakei.academy.utils;
-//
 
 import by.itacademy.pmakei.academy.entity.*;
 import by.itacademy.pmakei.academy.exceptions.IncorrectHumanIdException;
@@ -132,23 +131,6 @@ public final class AcademyUtils {
     String string = scanner.nextLine();
     return string;
   }
-
-//  public static Course getCourseNameFromUser() {
-//
-//    Course course = null;
-//
-//    do {
-//
-//      System.out.println("Введите название курса: \n");
-//      System.out.println("Доступные курсы");
-//      AcademyUtils.printAllCourses();
-//      String courseNameFromUser = getStringFromConsole();
-//
-//      course = academySingleton.getCourseByCourseName(courseNameFromUser);
-//    } while (course == null);
-//
-//    return course;
-//  }
 
   public static void printAllCourses() {
 

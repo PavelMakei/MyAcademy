@@ -1,6 +1,7 @@
 package by.itacademy.pmakei.academy.dao;
 
 public interface Dao <T>{
+
     //create
     boolean saveArchive();
     //read

@@ -50,4 +50,5 @@ public class Course implements Serializable {
       return "Курс " + courseName + ", преподаватель не назначен";
     }
   }
+
 }

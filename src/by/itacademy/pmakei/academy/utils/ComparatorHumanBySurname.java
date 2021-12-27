@@ -11,4 +11,5 @@ public class ComparatorHumanBySurname implements Comparator<Human> {
         String str2 = h2.getSurname();
         return str1.compareTo(str2);
     }
+
 }

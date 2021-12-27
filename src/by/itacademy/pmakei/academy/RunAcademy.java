@@ -2,7 +2,6 @@ package by.itacademy.pmakei.academy;
 
 import by.itacademy.pmakei.academy.entity.AcademySingleton;
 import by.itacademy.pmakei.academy.utils.AcademyUtils;
-//TODO дописать в меню сортировку
 
 /** @author Pavel Makei */
 public final class RunAcademy {
@@ -21,7 +20,5 @@ public final class RunAcademy {
     AcademyUtils.loadArchive();
     academySingleton.mainMenu();
   }
-
-
 
 }
